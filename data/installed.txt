@@ -1,0 +1,3 @@
+Play Store|2044
+Menu|1003
+Executando|9703
