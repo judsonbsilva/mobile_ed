@@ -11,3 +11,8 @@ struct app {
 	string name;
 	int size;
 };
+
+// Global vars
+app storeApps[APP_AMOUNT];
+app installedApps[APP_AMOUNT];
+app runningApps[APP_AMOUNT];

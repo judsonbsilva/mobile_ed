@@ -28,6 +28,16 @@ int countApps( app appList[] ){
 	
 	return counter;
 }
+
+// This list has this app?
+int hasApp( app theApp, app appList[] ){
+	for(int i = 0, length = countApps(appList); i < length; i++ )
+		if( appList[i].name == theApp.name )
+			return i;
+
+	return -1;
+}
+
 // Debug function do print app list
 void debug( app appList[] ){
 	cout << "[\n";
@@ -54,7 +64,7 @@ int getIndexToInsert( app thisApp, app appList[] ){
 			index = i; break;
 		}
 	}
-	
+
 	return index;
 }
 
@@ -65,19 +75,40 @@ void moveRigth(int index, int length, app appList[]){
 }
 
 // Insert an app in a index on the list
-void insertIn( int index, app currentApp, app appList[] ){
+void insertIn( app currentApp, app appList[] ){
+	
 	int length = countApps(appList);
 
-	// If list is empty or void
+	// If list is empty
 	if( length == 0 ){
 		appList[0] = currentApp;
-	} else if( index == length ){
+		return;
+	}
+
+	int index = getIndexToInsert( currentApp, appList);
+
+	if( index == length ){
 	// If is the last elements
 		appList[index] = currentApp;
 	} else {
 	// If element is between two other elements
 		moveRigth(index, length, appList );
 		appList[index] = currentApp;
+	}
+}
+
+void removeOf( app currentApp, app appList[] ){
+	
+	int index = hasApp( currentApp, appList ),
+		length = countApps( appList );
+
+	app voidApp;
+
+	if( index > -1 ){
+		for(int i = index; i < length; i++ ){
+			appList[index] = appList[index + 1];
+		}
+		appList[length - 1] = voidApp; 
 	}
 }
 
@@ -89,8 +120,10 @@ void getApps( fstream & file, app appList[] ){
 	int index;
 
 	while( !file.eof() ){
-		
+	
 		getline( file, content, '\n' );
+
+		if( content == "" ) continue;
 
 		index = content.find('|');
 
@@ -99,11 +132,6 @@ void getApps( fstream & file, app appList[] ){
 			content.substr(index + 1, content.length())
 		);
 		
-		insertIn(
-			getIndexToInsert(current, appList),
-			current,
-			appList
-		);
-
+		insertIn(current, appList);
 	}
 }
