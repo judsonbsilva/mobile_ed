@@ -74,6 +74,22 @@ void moveRigth(int index, int length, app appList[]){
 		appList[i] = appList[i - 1];
 }
 
+//Move elements to left
+void moveLeft(int index, int length, app appList[]){
+	app voidApp;
+	
+	if( index == length - 1 ){
+
+	}
+
+	for(int i = index - 1; i < length; i++ ){
+		debug(appList);
+		appList[index] = appList[index + 1];
+	}
+	sleep(4000);
+	appList[length - 1] = voidApp; 
+}
+
 // Insert an app in a index on the list
 void insertIn( app currentApp, app appList[] ){
 	
@@ -97,18 +113,16 @@ void insertIn( app currentApp, app appList[] ){
 	}
 }
 
-void removeOf( app currentApp, app appList[] ){
+void removeOf( int index, app appList[] ){
 	
-	int index = hasApp( currentApp, appList ),
-		length = countApps( appList );
+	int length = countApps( appList );
+	app	appVoid; 
 
-	app voidApp;
-
-	if( index > -1 ){
-		for(int i = index; i < length; i++ ){
-			appList[index] = appList[index + 1];
-		}
-		appList[length - 1] = voidApp; 
+	if( index > - 1 && index < length ){
+		if( index == length - 1 )
+			appList[index] = appVoid;
+		else 
+			moveLeft(index, length, appList);
 	}
 }
 

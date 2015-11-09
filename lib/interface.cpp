@@ -124,10 +124,10 @@ void initMyApps(){
 			}
 		} else if ( ( abs(input) - 1 ) == i ){
 			cout << "   " << (installedApps[i].name) << " apagado.\n";
-			removeOf(installedApps[i], installedApps);
+			removeOf(i, installedApps);
 		
 			if( hasApp(installedApps[i], runningApps) > -1 ){
-				removeOf(installedApps[i], runningApps);
+				removeOf(i, runningApps);
 			}
 
 			sleep(1000);
@@ -169,7 +169,7 @@ void initRunning(){
 		return;
 	}
 
-	removeOf( runningApps[input - 1], runningApps );
+	removeOf( input - 1, runningApps );
 	initHome();
 
 }
