@@ -77,18 +77,13 @@ void moveRigth(int index, int length, app appList[]){
 //Move elements to left
 void moveLeft(int index, int length, app appList[]){
 	app voidApp;
+
+	for(int i = index; i < length; i++ )
+		appList[i] = appList[i + 1];
 	
-	if( index == length - 1 ){
-
-	}
-
-	for(int i = index - 1; i < length; i++ ){
-		debug(appList);
-		appList[index] = appList[index + 1];
-	}
-	sleep(4000);
 	appList[length - 1] = voidApp; 
 }
+
 
 // Insert an app in a index on the list
 void insertIn( app currentApp, app appList[] ){
@@ -118,7 +113,7 @@ void removeOf( int index, app appList[] ){
 	int length = countApps( appList );
 	app	appVoid; 
 
-	if( index > - 1 && index < length ){
+	if( index >= 0 && index < length ){
 		if( index == length - 1 )
 			appList[index] = appVoid;
 		else 
@@ -127,7 +122,7 @@ void removeOf( int index, app appList[] ){
 }
 
 // get apps in a file
-void getApps( fstream & file, app appList[] ){
+void getApps( ifstream & file, app appList[] ){
 	
 	string content;
 	app current;

@@ -150,7 +150,7 @@ void initRunning(){
 		return;
 	}
 
-	setInterfaceTitle("  RODANDO ","Selecione para parar de rodar");
+	setInterfaceTitle("  RODANDO ","Selecione para fechar");
 	
 	for(int i = 0; i < length; i++ )
 		setItemList(i + 1, runningApps[i].name);
@@ -169,6 +169,8 @@ void initRunning(){
 		return;
 	}
 
+	cout << runningApps[input - 1].name << " fechado.\n";
+	sleep(1000);
 	removeOf( input - 1, runningApps );
 	initHome();
 

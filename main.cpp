@@ -16,8 +16,8 @@ using namespace std;
 int main () {
 	
 	// Files do read
-	fstream installedAppsFile;
-	fstream storeAppsFile;
+	ifstream installedAppsFile;
+	ifstream storeAppsFile;
 	
 	//fstream contextFile;
 
