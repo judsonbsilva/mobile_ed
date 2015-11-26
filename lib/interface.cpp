@@ -91,14 +91,12 @@ void initMyApps(){
 		return;
 	}
 
-	setInterfaceTitle(" MEUS APPS", "Selecione um app para rodar");
+	setInterfaceTitle(" MEUS APPS", "Selecione um app para rodar (para apagar '-' + número do app)");
 
 	for(int i = 0; i < length; i++ )
 		setItemList(i + 1, installedApps[i].name);
 
 	cout << "\n   0. Voltar\n";
-	cout << "\n   Para apagar digite '-' e o número do app\n";
-
 	int input;
 	cin >> input;
 
@@ -194,7 +192,8 @@ void closeApp(){
 	
 	clearScreen;
 	cout << "\n\n\n\n\t\tFeito por: Judson Silva.\n\n\n\n";
-	
+	cout << "Quantidade de movimentações feitas: " << moveLength;
+
 	int length = countApps( installedApps );
 
 	if( length == 0 ) return;

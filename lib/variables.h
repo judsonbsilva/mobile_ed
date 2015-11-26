@@ -16,3 +16,6 @@ struct app {
 app storeApps[APP_AMOUNT];
 app installedApps[APP_AMOUNT];
 app runningApps[APP_AMOUNT];
+
+// Moviments length
+int moveLength = 0;

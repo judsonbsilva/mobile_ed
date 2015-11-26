@@ -70,16 +70,20 @@ int getIndexToInsert( app thisApp, app appList[] ){
 
 // Move elements to rigth
 void moveRigth(int index, int length, app appList[]){
-	for(int i = length; i > index; i-- )
+	for(int i = length; i > index; i-- ){
 		appList[i] = appList[i - 1];
+		moveLength++;
+	}
 }
 
 //Move elements to left
 void moveLeft(int index, int length, app appList[]){
 	app voidApp;
 
-	for(int i = index; i < length; i++ )
+	for(int i = index; i < length; i++ ){
 		appList[i] = appList[i + 1];
+		moveLength++;
+	}
 	
 	appList[length - 1] = voidApp; 
 }
