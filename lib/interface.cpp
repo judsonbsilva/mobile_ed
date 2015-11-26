@@ -123,14 +123,28 @@ void initMyApps(){
 				initHome();
 			}
 		} else if ( ( abs(input) - 1 ) == i ){
-			cout << "   " << (installedApps[i].name) << " apagado.\n";
-			removeOf(i, installedApps);
-		
-			if( hasApp(installedApps[i], runningApps) > -1 ){
-				removeOf(i, runningApps);
+			
+			char response;
+			int appRunning = hasApp(installedApps[i], runningApps);
+			
+			if( appRunning > -1 ){
+				cout << "   " << installedApps[i].name << " Está executando. Desenha mesmo excluir? (S/N)";
+				cin >> response;
 			}
 
-			sleep(1000);
+			if( appRunning == -1 || response == 's' || response == 'S' ){
+
+				cout << "   " << (installedApps[i].name) << " apagado.\n";
+				removeOf(i, installedApps);
+				
+				if( appRunning > -1 ){
+					removeOf(appRunning, runningApps);
+				}
+
+				sleep(1000);
+			
+			}
+
 			initMyApps();
 		}
 
