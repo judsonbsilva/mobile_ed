@@ -1,0 +1,6 @@
+Para compilar é necessário utilizar:
+g++ 4.8.4 com a versão 11 do C++.
+O código foi desenvolvido e testado em linux.
+Comando para compilar:
+
+g++ -std=c++11 main.cpp
