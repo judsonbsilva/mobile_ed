@@ -15,6 +15,7 @@ struct app {
 // Global vars
 app storeApps[APP_AMOUNT];
 app installedApps[APP_AMOUNT];
+app homeApps[10];
 app runningApps[APP_AMOUNT];
 
 // Moviments length

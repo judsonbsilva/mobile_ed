@@ -4,3 +4,8 @@ Ovo|87
 Facebook|3059
 Solid Explorer|5430
 Whatsapp|3404
+Instagram|2345
+Twitter|1298
+Retrica|1998
+Calendário|780
+Despertador|235

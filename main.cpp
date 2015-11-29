@@ -24,6 +24,12 @@ int main () {
 	// Load instaled apps in lists
 	installedAppsFile.open( INSTALLED_APPS_FILE  );
 	getApps( installedAppsFile, installedApps);
+
+	// Pass instaled apps to home
+	for(int i = 0, to = countApps(installedApps); (i < to && i < 10); i++)
+		if( installedApps[i].name != "" )
+			homeApps[i] = installedApps[i];
+
 	installedAppsFile.close();
 	
 	// Load app store

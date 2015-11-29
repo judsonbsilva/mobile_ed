@@ -20,7 +20,8 @@ void initStore(){
 
 	setInterfaceTitle("   STORE  ", "Selecione um para instalar");
 
-	int length = countApps(storeApps);
+	int length = countApps(storeApps),
+		homeAppsLength = countApps(homeApps);
 
 	for(int i = 0; i < length; i++ )
 		setItemList(i + 1, storeApps[i].name);
@@ -47,6 +48,10 @@ void initStore(){
 			} else {
 				cout << "   " << (storeApps[i].name) << " instalado com sucesso.\n";
 				insertIn(storeApps[i], installedApps);
+				
+				if( homeAppsLength < 10 )
+					insertIn(storeApps[i], homeApps);
+				
 				sleep(1000);
 				initHome();
 			}
@@ -64,17 +69,48 @@ void initHome(){
 	setItemList(3, "Executando");
 	cout << "\n";
 	setItemList(0, "Voltar\n");
+	cout << "-------------------------------\n    Área de Trabalho\n\n";
 
+	int to = countApps(homeApps);
+
+	for(int i = 0; i < to; i++)
+		if( homeApps[i].name != "" )
+			setItemList(i + 4, homeApps[i].name);
+	
 	int input;
+
 	cin >> input;
 
-	switch( input ){
-		case 0: closeApp(); break;
-		case 1: initStore(); break;
-		case 2: initMyApps(); break;
-		case 3: initRunning(); break;
-		default: initHome();
+	if( cin.fail() ){
+		cout << "    Erro, caractere inválido\n";
+		return;
 	}
+
+
+	if( input == 0 )
+		closeApp();
+	else if( input == 1 )
+		initStore();
+	else if( input == 2 )
+		initMyApps();
+	else if( input == 3 )
+		initRunning();
+	else if( input > 3 && input < to + 5 ){
+		input = input - 4;	
+		
+		if( hasApp(homeApps[input], runningApps) > -1 ){
+			cout << "   " << (homeApps[input].name) << " já está sendo executado.\n";
+			sleep(1000);
+			initHome();
+		} else {
+			cout << "   " << (homeApps[input].name) << " rodando.\n";
+			insertIn(homeApps[input], runningApps);
+			sleep(1000);
+			initHome();
+		}
+
+	} else initHome();
+	
 
 }
 
@@ -100,6 +136,13 @@ void initMyApps(){
 	int input;
 	cin >> input;
 
+
+	if( cin.fail() ){
+		cout << "    Erro, caractere inválido\n";
+		return;
+	}
+
+
 	if( input == 0 ){
 		initHome();
 		return;
@@ -123,7 +166,9 @@ void initMyApps(){
 		} else if ( ( abs(input) - 1 ) == i ){
 			
 			char response;
-			int appRunning = hasApp(installedApps[i], runningApps);
+			
+			int appRunning = hasApp(installedApps[i], runningApps),
+				homeApp = hasApp(installedApps[i], homeApps);
 			
 			if( appRunning > -1 ){
 				cout << "   " << installedApps[i].name << " Está executando. Desenha mesmo excluir? (S/N)";
@@ -133,11 +178,15 @@ void initMyApps(){
 			if( appRunning == -1 || response == 's' || response == 'S' ){
 
 				cout << "   " << (installedApps[i].name) << " apagado.\n";
+				
 				removeOf(i, installedApps);
 				
-				if( appRunning > -1 ){
+				if( appRunning > -1 )
 					removeOf(appRunning, runningApps);
-				}
+				
+				if( homeApp > -1 )
+					removeOf(homeApp, homeApps);
+
 
 				sleep(1000);
 			
@@ -172,6 +221,13 @@ void initRunning(){
 	
 	int input;
 	cin >> input;
+
+
+	if( cin.fail() ){
+		cout << "    Erro, caractere inválido\n";
+		return;
+	}
+
 
 	if( input == 0 ){
 		initHome();
