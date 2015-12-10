@@ -4,91 +4,72 @@
 
 using namespace std;
 
-// Define app struct
-struct app {
-	string name;
-	int size;
-};
+// Variables and constants
+#include "lib/variables.h"
 
-#define APP_AMOUNT 100
+// List functions
+#include "lib/functions.cpp"
 
-// Global vars
-app storeApps[APP_AMOUNT];
+// Interface functions
+// #include "lib/interface.cpp"
 
-
-int countApps( app appList[] ){
-	int counter = 0;
-	
-	for(int i = 0; i < APP_AMOUNT; i++){
-		if( appList[i].name != "" )
-			counter++;
-	}
-	
-	return counter;
+void showTest(){
+	debug(storeApps);
+	cout << "\n";
 }
-
-
-
-void debug( app appList[] ){
-	cout << "[\n";
-	
-	for(int i = 0, length = countApps(appList); i < length; i++){
-		cout << "\t{\n";
-		cout << "\t\tname: " << appList[i].name << "\n";
-		cout << "\t\tsize: " << appList[i].size << "\n";
-		cout << "\t\n\t}\n";
-	}
-
-	cout << "]\n";
-}
-
-void moveLeft(int index, int length, app appList[]){
-	app voidApp;
-
-	for(int i = index; i < length; i++ )
-		appList[i] = appList[i + 1];
-	
-	appList[length - 1] = voidApp; 
-}
-
-void removeOf( int index, app appList[] ){
-	
-	int length = countApps( appList );
-	app	appVoid; 
-
-	if( index >= 0 && index < length ){
-		if( index == length - 1 )
-			appList[index] = appVoid;
-		else 
-			moveLeft(index, length, appList);
-	}
-}
-
 
 int main(){
 
 	app test;
-	
+
+	showTest();
 	test.name = "AAAAA";
-	test.size = 0;
-	storeApps[0] = test;
-	test.name = "BBBB";
 	test.size = 1;
-	storeApps[1] = test;
-	test.name = "CCCC";
-	test.size = 2;
-	storeApps[2] = test;
-	test.name = "DDDDD";
+
+	insertIn( test, &storeApps );
+	showTest();
+
+	test.name = "BBBB";
 	test.size = 3;
-	storeApps[3] = test;
-	test.name = "EEEEE";
-	test.size = 4;
-	storeApps[4] = test;
 
-	debug(storeApps);
-	removeOf( 1, storeApps );
-	debug(storeApps);
+	insertIn( test, &storeApps );
+	showTest();
+	
+	test.name = "CCCC";
+	test.size = 0;
+	
+	insertIn( test, &storeApps );
+	showTest();
 
+	test.name = "DDDD";
+	test.size = 55;
+	
+	insertIn( test, &storeApps );
+	showTest();
+	
+	test.name = "EEEE";
+	test.size = 2;
+
+	insertIn( test, &storeApps );
+	showTest();
+	
+	test.name = "FFFFF";
+	test.size = 45;
+
+	insertIn( test, &storeApps );
+	showTest();
+	
+	test.name = "GGGG";
+	test.size = 16;
+
+	insertIn( test, &storeApps );
+	showTest();
+
+	test.name = "HHHH";
+	test.size = 55;
+
+	insertIn( test, &storeApps );
+	showTest();
 
 	return 0;
 }

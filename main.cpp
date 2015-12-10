@@ -11,7 +11,7 @@ using namespace std;
 #include "lib/functions.cpp"
 
 // Interface functions
-#include "lib/interface.cpp"
+// #include "lib/interface.cpp"
 
 int main () {
 	
@@ -19,26 +19,29 @@ int main () {
 	ifstream installedAppsFile;
 	ifstream storeAppsFile;
 	
-	//fstream contextFile;
-
 	// Load instaled apps in lists
 	installedAppsFile.open( INSTALLED_APPS_FILE  );
-	getApps( installedAppsFile, installedApps);
-
-	// Pass instaled apps to home
-	for(int i = 0, to = countApps(installedApps); (i < to && i < 10); i++)
-		if( installedApps[i].name != "" )
-			homeApps[i] = installedApps[i];
-
+	
+	getApps( installedAppsFile, &installedApps);
+	
 	installedAppsFile.close();
+	
+	// Pass instaled apps to home
+	// for(int i = 0, to = countApps(installedApps); (i < to && i < 10); i++)
+	//	 if( installedApps[i].name != "" )
+	//		homeApps[i] = installedApps[i];
+
 	
 	// Load app store
 	storeAppsFile.open( STORE_FILE );
-	getApps( storeAppsFile, storeApps);
+		getApps( storeAppsFile, &storeApps);
 	storeAppsFile.close();
 
 	// Call interface here
-	initHome();
+	
+	debug( storeApps );
+	
+	// initHome();
 	
 	return 0;
 }
