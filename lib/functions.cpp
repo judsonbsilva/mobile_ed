@@ -56,38 +56,42 @@ void debug( llv apps ){
 }
 
 // Get the index of list to insert an app
-int getIndexToInsert( app thisApp, llv apps ){
+int getIndexToInsert( app thisApp, llv *apps ){
 	
 	// If is empty
-	if( countApps(apps) == 0 ) return APP_AMOUNT/2;
+	if( countApps(*apps) == 0 ) return APP_AMOUNT/2;
 
-	for(int i = apps.il; i <= apps.fl; i++)
-		if( thisApp.size <= apps.list[i].size )
-			return i == apps.il ? i - 1 : i;
-
-	return apps.fl + 1;
+	for(int i = apps->il; i <= apps->fl; i++)
+		if( thisApp.size <= apps->list[i].size )
+			return i;
+		
+	return apps->fl + 1;
 }
 
 // Move elements to rigth
 void moveRigth(int from, int to, llv * apps ){
 	
+	// If not space in right
+	if( apps->fl + 1 == apps->fa ) return;
+
 	for(int i = to; i >= from; i-- ){
 		apps->list[i + 1] = apps->list[i];
 		moveLength++;
 	}
 
-	apps->fl += 1;
 }
 
 //Move elements to left
 void moveLeft(int from, int to, llv *apps ){
 	
+	// If not space in left
+	if( apps->il - 1 == apps->ia ) return;
+
 	for(int i = from; i <= to; i++ ){
 		apps->list[i - 1] = apps->list[i];
 		moveLength++;
 	}
 
-	apps->il -= 1;
 }
 
 // Insert an app in a index on the list
@@ -98,99 +102,114 @@ void insertIn( app currentApp, llv *apps ){
 	// If list is empty
 	if( length == 0 ){
 
-		apps->il = APP_AMOUNT/2;
+		apps->il = (apps->fa - apps->ia)/2;
 		apps->fl = apps->il; 
 		apps->list[ apps->il ] = currentApp;
 
 		return;
 	}
 
-	int index = getIndexToInsert( currentApp, *apps);
+	int index = getIndexToInsert( currentApp, &*apps);
+	
 	//cout << "I: " << index << "\n" << "Size: " << currentApp.size << "\n\n"; 
 	
 	bool leftSpace = apps->il != apps->ia,
 		 rightSpace = apps->fa != apps->fl;
 
-	// After finish of the list
-	if( index == apps->fl + 1 ){
+	if( !leftSpace && !rightSpace ) return;
+
+	// Finish of the list
+	if( index == apps->fl ){
 		// Has space on right
 		if( rightSpace ){
-			apps->fl += 1;
+			apps->list[ apps->fl + 1 ] = apps->list[ apps->fl ];
 			apps->list[ apps->fl ] = currentApp;
+			apps->fl += 1;
 		} else {
 			moveLeft( apps->il, apps->fl, &*apps );
-			apps->list[ apps->fl ] = currentApp;
+			apps->il -= 1;
+			apps->list[ apps->fl ] = apps->list[ apps->fl - 1 ];
+			apps->list[ apps->fl - 1 ] = currentApp;
 		}
 		return;
 	}
 
-	// Before begin of the list
-	if( index == apps->il - 1){
+	// Begin of the list
+	if( index == apps->il ){
 		// Has space on left
 		if( leftSpace ){ 
 			apps->il -= 1;
 			apps->list[ apps->il ] = currentApp;
 		} else {
 			moveRigth( apps->il, apps->fl, &*apps );
-			apps->list[ apps->il ] = currentApp;
+			apps->fl += 1;
+			apps->list[ apps->il ] = apps->list[ apps->il + 1 ];
+			apps->list[ apps->il + 1 ] = currentApp;
 		} 
 		return;
 	}
 
-	// In finish of the list
-	if( index == apps->fl ){
-		// Has space on right
+	// After finish
+	if( index > apps->fl ){
+		//cout << "\n\n:OP:3:\n\n";
 		if( rightSpace ){
 			apps->fl += 1;
-			apps->list[ apps->fl ] = apps->list[ apps->fl - 1 ];
-			apps->list[ apps->fl - 1] = currentApp;
+			apps->list[ apps->fl ] = currentApp;
 		} else {
-			//moveLeft( apps->il, apps->fl, &*apps );
-			//apps->list[ apps->fl ] = apps->list[ apps->fl - 1 ];
-			//apps->list[ apps->fl - 1 ] = currentApp;
-		}
-		return;
-	}
-
-	// In begin of the list
-	if( index == apps->fl ){
-		// Has space on left
-		if( leftSpace ){ 
+			moveLeft( apps->il, apps->fl, &*apps );
 			apps->il -= 1;
-			apps->list[ apps->il - 1 ] = apps->list[ apps->il ];
-			apps->list[ apps->il ] = currentApp;
-		} else {
-			//moveRigth( apps->il, apps->fl, &*apps );
-			//apps->list[ apps->il - 1 ] = currentApp;
-		} 
+			apps->list[ apps->fl ] = currentApp;
+		}
+
 		return;
 	}
 
 	// Between
-	if( ( index - apps->il ) > ( apps->fl - index ) ){
+	// If left has more elements
+	if( abs( index - apps->il ) > abs( apps->fl - index ) ){
 		moveRigth( index, apps->fl, &*apps);
+		apps->fl += 1;
 		apps->list[index] = currentApp;
+	// If right has more elements
 	} else {
 		moveLeft( apps->il, index, &*apps);
-		apps->list[index] = currentApp;
+		apps->il -= 1;
+		apps->list[index - 1] = currentApp;
 	}
 	
 }
 
-void removeOf( int index, llv appList ){
+void removeOf( int index, llv *apps ){
 	
-	int length = countApps( appList );
-	app	appVoid; 
+	int length = countApps( *apps );
+	
+	if( length == 1 ){
 
-	if( appList.fl == index )
-		appList.fl -= 1;
-	else if ( appList.il == index )
-		appList.il += 1;
-	else {
-		// Code here
-		// moveLeft(index, length, appList);
+		apps->il = -1;
+		apps->fl = -1;
+
+		return;
 	}
-	
+	// In finish of list
+	if( index == apps->fl ){
+		apps->fl -= 1;
+		return;
+	}
+	// In begin of list
+	if( index == apps->il ){
+		apps->il += 1;
+		return;
+	}
+
+	// If left has more elements
+	if( abs( index - apps->il ) > abs( apps->fl - index ) ){
+		moveLeft( index + 1, apps->fl, &*apps);
+		apps->fl -= 1;
+	// If right has more elements
+	} else {
+		moveRigth( apps->il, index - 1, &*apps);
+		apps->il += 1;
+	}
 }
 
 // get apps in a file

@@ -16,6 +16,13 @@ void setItemList( int i, string item ){
 	cout << "   " << i << ". " << item << "\n"; 
 }
 
+void hasError(){
+	if( cin.fail() ){
+		cout << "    Erro, caractere inválido!!!\n";
+		return;
+	}
+}
+
 void initStore(){
 
 	setInterfaceTitle("   STORE  ", "Selecione um para instalar");
@@ -23,8 +30,9 @@ void initStore(){
 	int length = countApps(storeApps),
 		homeAppsLength = countApps(homeApps);
 
-	for(int i = 0; i < length; i++ )
-		setItemList(i + 1, storeApps[i].name);
+	int i = 1;
+	for(int from = storeApps.il; from <= storeApps.fl; from++, i++ )
+		setItemList(i, storeApps.list[from].name);
 
 	cout << "\n";
 	setItemList(0, "Voltar\n");
@@ -39,7 +47,7 @@ void initStore(){
 		initStore(); return;
 	}
 
-	for(int i = 0; i <= length; i++){
+	/*for(int i = 0; i <= length; i++){
 		if( (input - 1) == i ){
 			if( hasApp(storeApps[i], installedApps) > -1 ){
 				cout << "   " << (storeApps[i].name) << " já instalado.\n";
@@ -56,7 +64,7 @@ void initStore(){
 				initHome();
 			}
 		}
-	}
+	}*/
 }
 
 // Show screen
@@ -71,21 +79,18 @@ void initHome(){
 	setItemList(0, "Voltar\n");
 	cout << "-------------------------------\n    Área de Trabalho\n\n";
 
-	int to = countApps(homeApps);
+	int homeLength = countApps(homeApps);
 
-	for(int i = 0; i < to; i++)
-		if( homeApps[i].name != "" )
-			setItemList(i + 4, homeApps[i].name);
+	if( homeLength )
+		for(int i = homeApps.il; i <= homeApps.fl; i++)
+			if( homeApps.list[i].name != "" )
+				setItemList(i + 4, homeApps.list[i].name);
 	
 	int input;
 
 	cin >> input;
 
-	if( cin.fail() ){
-		cout << "    Erro, caractere inválido\n";
-		return;
-	}
-
+	hasError();
 
 	if( input == 0 )
 		closeApp();
@@ -95,7 +100,7 @@ void initHome(){
 		initMyApps();
 	else if( input == 3 )
 		initRunning();
-	else if( input > 3 && input < to + 5 ){
+	/*else if( input > 3 && input < to + 5 ){
 		input = input - 4;	
 		
 		if( hasApp(homeApps[input], runningApps) > -1 ){
@@ -109,9 +114,9 @@ void initHome(){
 			initHome();
 		}
 
-	} else initHome();
+	} */
+	else initHome();
 	
-
 }
 
 void initMyApps(){
@@ -129,19 +134,15 @@ void initMyApps(){
 
 	setInterfaceTitle(" MEUS APPS", "Selecione um app para rodar (para apagar '-' + número do app)");
 
-	for(int i = 0; i < length; i++ )
-		setItemList(i + 1, installedApps[i].name);
+	for(int i = 1, from = installedApps.il; from <= installedApps.fl; from++, i++ )
+		setItemList(i, installedApps.list[i].name);
 
 	cout << "\n   0. Voltar\n";
+	
 	int input;
 	cin >> input;
 
-
-	if( cin.fail() ){
-		cout << "    Erro, caractere inválido\n";
-		return;
-	}
-
+	hasError();
 
 	if( input == 0 ){
 		initHome();
@@ -150,7 +151,7 @@ void initMyApps(){
 		initMyApps();
 		return;
 	}
-
+	/*
 	for( int i = 0; i < length; i++){
 		if( (input - 1) == i ){
 			if( hasApp(installedApps[i], runningApps) > -1 ){
@@ -195,11 +196,12 @@ void initMyApps(){
 			initMyApps();
 		}
 
-	}
+	}*/
 
 }
 
 void initRunning(){
+	
 	setInterfaceTitle("  RODANDO ","");
 	
 	int length = countApps(runningApps);
@@ -213,21 +215,15 @@ void initRunning(){
 
 	setInterfaceTitle("  RODANDO ","Selecione para fechar");
 	
-	for(int i = 0; i < length; i++ )
-		setItemList(i + 1, runningApps[i].name);
-
+	for(int i = 1, from = runningApps.il; from <= runningApps.fl; from++, i++ )
+		setItemList(i, runningApps.list[i].name);
 
 	cout << "\n   0. Voltar\n";
 	
 	int input;
 	cin >> input;
 
-
-	if( cin.fail() ){
-		cout << "    Erro, caractere inválido\n";
-		return;
-	}
-
+	hasError();
 
 	if( input == 0 ){
 		initHome();
@@ -237,9 +233,10 @@ void initRunning(){
 		return;
 	}
 
-	cout << runningApps[input - 1].name << " fechado.\n";
+	cout << runningApps.list[input - 1].name << " fechado.\n";
+	
 	sleep(1000);
-	removeOf( input - 1, runningApps );
+	removeOf( input - 1, &runningApps );
 	initHome();
 
 }
@@ -257,8 +254,8 @@ void closeApp(){
 	ofstream installedAppsFile(INSTALLED_APPS_FILE, ofstream::out | ofstream::trunc);
 
 	for(int i = 0; i < length; i++){
-		installedAppsFile << installedApps[i].name << "|";
-		installedAppsFile << installedApps[i].size;
+		installedAppsFile << installedApps.list[i].name << "|";
+		installedAppsFile << installedApps.list[i].size;
 		if( i != length - 1)
 			installedAppsFile << "\n";
 	}

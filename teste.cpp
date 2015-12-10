@@ -20,55 +20,26 @@ void showTest(){
 
 int main(){
 
+	string names[] = {"Google Keep", "Netshoes", "Ovo", "Facebook", "Solid Explorer", "Whatsapp", "Instagram", "Twitter"};
+	int sizes[] = {2, 6, 1, 8, 10, 9, 7, 5};
+
 	app test;
 
-	showTest();
-	test.name = "AAAAA";
-	test.size = 1;
+	for(int i = 0; i < 8; i++){
+		test.name = names[i];
+		test.size = sizes[i];
 
-	insertIn( test, &storeApps );
-	showTest();
+		insertIn( test, &storeApps );
+	}
 
-	test.name = "BBBB";
-	test.size = 3;
-
-	insertIn( test, &storeApps );
 	showTest();
 	
-	test.name = "CCCC";
-	test.size = 0;
-	
-	insertIn( test, &storeApps );
+	removeOf( 50, &storeApps );
+
 	showTest();
 
-	test.name = "DDDD";
-	test.size = 55;
-	
-	insertIn( test, &storeApps );
-	showTest();
-	
-	test.name = "EEEE";
-	test.size = 2;
+	removeOf( 52, &storeApps );
 
-	insertIn( test, &storeApps );
-	showTest();
-	
-	test.name = "FFFFF";
-	test.size = 45;
-
-	insertIn( test, &storeApps );
-	showTest();
-	
-	test.name = "GGGG";
-	test.size = 16;
-
-	insertIn( test, &storeApps );
-	showTest();
-
-	test.name = "HHHH";
-	test.size = 55;
-
-	insertIn( test, &storeApps );
 	showTest();
 
 	return 0;
