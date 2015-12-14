@@ -26,8 +26,8 @@ int main () {
 		getApps( installedAppsFile, &installedApps);
 	installedAppsFile.close();
 	
-	// Pass instaled apps to home
-	for(int i = installedApps.il; i <= installedApps.fl || i < 10; i++)
+	// Pass installed apps to home
+	for(int i = installedApps.il; (i <= installedApps.fl && ((i - installedApps.il) < 10)); i++)
 		insertIn( installedApps.list[i], &homeApps);
 	
 	// Load app store
@@ -36,13 +36,7 @@ int main () {
 	storeAppsFile.close();
 
 	// Call interface here
-	
-	//debug( storeApps );
-	
-	removeOf( 50, &storeApps);
-
-	//debug( storeApps );
-	//initHome();
+	initHome();
 	
 	return 0;
 }

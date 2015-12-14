@@ -23,10 +23,10 @@ int countApps( llv appList ){
 };
 
 // This list has this app?
-int hasApp( app theApp, llv appList ){
+int hasApp( app theApp, llv apps ){
 
-	for(int i = appList.il, length = appList.fl; i < length; i++ )
-		if( appList.list[i].name == theApp.name )
+	for(int i = apps.il, length = apps.fl; i < length; i++ )
+		if( apps.list[i].name == theApp.name )
 			return i;
 
 	return -1;
@@ -232,6 +232,6 @@ void getApps( ifstream & file, llv *apps ){
 			content.substr(index + 1, content.length())
 		);
 		
-		insertIn(current, &*apps);
+		insertIn(current, &(*apps));
 	}
 }
