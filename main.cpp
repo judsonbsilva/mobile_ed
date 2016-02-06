@@ -6,16 +6,20 @@ using namespace std;
 
 // Variables and constants
 #include "lib/variables.h"
-
 // List functions
 #include "lib/functions.cpp"
-
 // Interface functions
 #include "lib/interface.cpp"
 
+
+
 int main () {
 	
-	homeApps.fa = 10;
+	// Global vars
+	llse storeApps = createLLSE();
+	llse installedApps = createLLSE();
+	llse homeApps = createLLSE();
+	llse runningApps = createLLSE();
 
 	// Files do read
 	ifstream installedAppsFile;
@@ -23,7 +27,7 @@ int main () {
 	
 	// Load instaled apps in lists
 	installedAppsFile.open( INSTALLED_APPS_FILE  );
-		getApps( installedAppsFile, &installedApps);
+	getApps( installedAppsFile, &installedApps);
 	installedAppsFile.close();
 	
 	// Pass installed apps to home
@@ -32,11 +36,11 @@ int main () {
 	
 	// Load app store
 	storeAppsFile.open( STORE_FILE );
-		getApps( storeAppsFile, &storeApps);
+	getApps( storeAppsFile, &storeApps);
 	storeAppsFile.close();
 
 	// Call interface here
-	initHome();
+	// initHome();
 	
 	return 0;
 }

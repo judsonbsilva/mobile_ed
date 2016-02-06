@@ -6,41 +6,48 @@ using namespace std;
 
 // Variables and constants
 #include "lib/variables.h"
-
 // List functions
 #include "lib/functions.cpp"
 
 // Interface functions
 // #include "lib/interface.cpp"
 
-void showTest(){
+void showTest( llse storeApps ){
 	debug(storeApps);
 	cout << "\n";
 }
 
 int main(){
 
-	string names[] = {"Google Keep", "Netshoes", "Ovo", "Facebook", "Solid Explorer", "Whatsapp", "Instagram", "Twitter"};
-	int sizes[] = {2, 6, 1, 8, 10, 9, 7, 5};
+	llse storeApps = createLLSE();
 
-	app test;
+	string names[] = {"Google Keep", "Netshoes", "Ovo", "Facebook", "Solid Explorer", "Whatsapp", "Instagram", "Twitter"};
+	int sizes[] = {2, 3, 5, 1, 4, 0, 7, 5};
+
+	showTest( storeApps );
+
+	app example;
 
 	for(int i = 0; i < 8; i++){
-		test.name = names[i];
-		test.size = sizes[i];
+		example.name = names[i];
+		example.size = sizes[i];
 
-		insertIn( test, &storeApps );
+		insertIn( example, &storeApps );
 	}
 
-	showTest();
-	
-	removeOf( 50, &storeApps );
+	showTest( storeApps );
+	removeOf( storeApps.init, &storeApps );
+	showTest( storeApps );
+	removeOf( storeApps.finish, &storeApps );
+	showTest( storeApps );
+	removeOf( 3, &storeApps );
+	showTest( storeApps );
 
-	showTest();
+	// showTest();
 
-	removeOf( 52, &storeApps );
+	// removeOf( 52, &storeApps );
 
-	showTest();
+	// showTest();
 
 	return 0;
 }

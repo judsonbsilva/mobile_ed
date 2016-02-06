@@ -11,18 +11,18 @@ struct app {
 	string name;
 	int size;
 };
-
-struct llv {
-	app list[APP_AMOUNT];
-	int ia = 0, fa = APP_AMOUNT - 1,
-		il = -1, fl = -1;
+// Node of llse
+struct node {
+	// The app
+	app content;
+	// Next node
+	int next;
 };
 
-// Global vars
-llv storeApps;
-llv installedApps;
-llv homeApps;
-llv runningApps;
+struct llse {
+	node list[APP_AMOUNT];
+	int init = -1, finish = -1, avaible = 0;
+};
 
 //app storeApps[APP_AMOUNT];
 //app installedApps[APP_AMOUNT];
@@ -32,4 +32,3 @@ llv runningApps;
 
 // Moviments length
 int moveLength = 0;
-
