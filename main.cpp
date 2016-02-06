@@ -16,10 +16,10 @@ using namespace std;
 int main () {
 	
 	// Global vars
-	llse storeApps = createLLSE();
-	llse installedApps = createLLSE();
-	llse homeApps = createLLSE();
-	llse runningApps = createLLSE();
+	storeApps = createLLSE();
+	installedApps = createLLSE();
+	homeApps = createLLSE();
+	runningApps = createLLSE();
 
 	// Files do read
 	ifstream installedAppsFile;
@@ -31,16 +31,19 @@ int main () {
 	installedAppsFile.close();
 	
 	// Pass installed apps to home
-	for(int i = installedApps.il; (i <= installedApps.fl && ((i - installedApps.il) < 10)); i++)
-		insertIn( installedApps.list[i], &homeApps);
+	int counter = 1;
+	for(int i = installedApps.init; i != -1; i = installedApps.list[i].next, counter++)
+		if( counter <= 10 )
+			insertIn( installedApps.list[i].content, &homeApps);
 	
+
 	// Load app store
 	storeAppsFile.open( STORE_FILE );
 	getApps( storeAppsFile, &storeApps);
 	storeAppsFile.close();
 
 	// Call interface here
-	// initHome();
+	initHome();
 	
 	return 0;
 }

@@ -41,10 +41,16 @@ int countApps( llse apps ){
 
 // This list has this app?
 int hasApp( app theApp, llse apps ){
-
 	for(int i = apps.init; i != -1; i = apps.list[i].next )
 		if( apps.list[i].content.name == theApp.name )
 			return i;
+
+	return -1;
+}
+
+int getTheIndex( int number, llse apps ){
+	for(int i = apps.init, counter = 1; i != -1; i = apps.list[i].next, counter++ )
+		if( counter == number ) return i;
 
 	return -1;
 }

@@ -24,11 +24,8 @@ struct llse {
 	int init = -1, finish = -1, avaible = 0;
 };
 
-//app storeApps[APP_AMOUNT];
-//app installedApps[APP_AMOUNT];
-//app homeApps[10];
-//app runningApps[APP_AMOUNT];
-
+// Global vars
+llse storeApps,installedApps, homeApps, runningApps;
 
 // Moviments length
 int moveLength = 0;

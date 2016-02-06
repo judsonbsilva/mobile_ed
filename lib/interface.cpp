@@ -42,8 +42,11 @@ void initStore(){
 		homeAppsLength = countApps(homeApps);
 
 	int i = 1;
-	for(int from = storeApps.il; from <= storeApps.fl; from++, i++ )
-		setItemList(i, storeApps.list[from].name);
+	for(
+		int from = storeApps.init;
+			from != -1;
+			from = storeApps.list[from].next, i++ )
+		setItemList(i, storeApps.list[from].content.name);
 
 	cout << "\n";
 	setItemList(0, "Voltar\n");
@@ -58,22 +61,17 @@ void initStore(){
 	} else if( input < 0 || input > length ){
 		initStore();
 	} else {
-
-		input += storeApps.il - 1;
-
-		//cout << "\nIL: " <<  storeApps.il << " I: "<< input << "\n"; 
-		//cout << storeApps.list[input].name << "\n";
-		
-		if( hasApp(storeApps.list[input], installedApps) > -1 ){
-			cout << "   " << storeApps.list[input].name << " já instalado.\n";
+		input = getTheIndex(input, storeApps);
+		if( hasApp(storeApps.list[input].content, installedApps) > -1 ){
+			cout << "   " << storeApps.list[input].content.name << " já instalado.\n";
 			sleep(1000);
 			initStore();
 		} else {
-			cout << "   " << storeApps.list[input].name << " instalado com sucesso.\n";
-			insertIn(storeApps.list[input], &installedApps);
+			cout << "   " << storeApps.list[input].content.name << " instalado com sucesso.\n";
+			insertIn(storeApps.list[input].content, &installedApps);
 				
 			if( homeAppsLength < 10 )
-				insertIn(storeApps.list[input], &homeApps);
+				insertIn(storeApps.list[input].content, &homeApps);
 			
 			sleep(1000);
 			initHome();
@@ -98,15 +96,12 @@ void initHome(){
 
 	if( homeLength > 0 ){
 		
-		int counter = 0;
-		for(int i = homeApps.il; i <= homeApps.fl; i++){
-			if( homeApps.list[i].name != "" ){
-				cout << setStringSize( homeApps.list[i].name,15) << "   ";
-				counter++;
-				if( counter == 3 ){
-					cout << "\n";
-					counter = 0;
-				}
+		for(int i = homeApps.init, counter = 0; i != -1; i = homeApps.list[i].next){
+			cout << setStringSize( homeApps.list[i].content.name,15) << "   ";
+			counter++;
+			if( counter == 3 ){
+				cout << "\n";
+				counter = 0;
 			}
 		}
 
@@ -130,20 +125,18 @@ void initHome(){
 	else if( input < 3 && input > homeLength )
 		initHome();
 	else {
+		input = getTheIndex(input - 3, homeApps);
 
-		input += homeApps.il + 3;	
-		
-		if( hasApp(homeApps.list[ input ], runningApps) > -1 ){
-			cout << "   " << (homeApps.list[input].name) << " já está sendo executado.\n";
+		if( hasApp(homeApps.list[ input ].content, runningApps) > -1 ){
+			cout << "   " << (homeApps.list[input].content.name) << " já está sendo executado.\n";
 			sleep(1000);
 			initHome();
 		} else {
-			cout << "   " << (homeApps.list[input].name) << " rodando.\n";
-			insertIn(homeApps.list[input], &runningApps);
+			cout << "   " << (homeApps.list[input].content.name) << " rodando.\n";
+			insertIn(homeApps.list[input].content, &runningApps);
 			sleep(1000);
 			initHome();
 		}
-
 	}
 	
 }
@@ -163,8 +156,8 @@ void initMyApps(){
 
 	setInterfaceTitle(" MEUS APPS", "Selecione um app para rodar (para apagar '-' + número do app)");
 
-	for(int i = 1, from = installedApps.il; from <= installedApps.fl; from++, i++ )
-		setItemList(i, installedApps.list[from].name);
+	for(int i = 1, from = installedApps.init; from != -1; from = installedApps.list[from].next, i++ )
+		setItemList(i, installedApps.list[from].content.name);
 
 	cout << "\n   0. Voltar\n";
 	
@@ -186,34 +179,34 @@ void initMyApps(){
 			uninstall = true;
 		}
 		
-		input += installedApps.il - 1;
+		input = getTheIndex(input, installedApps);
 		
-		if( !uninstall && hasApp(installedApps.list[input], runningApps) > -1 ){
-			cout << "   " << (installedApps.list[input].name) << " já está sendo executado.\n";
+		if( !uninstall && hasApp(installedApps.list[input].content, runningApps) > -1 ){
+			cout << "   " << (installedApps.list[input].content.name) << " já está sendo executado.\n";
 			sleep(1000);
 			initMyApps();
 		} else if( !uninstall ){
-			cout << "   " << (installedApps.list[input].name) << " rodando.\n";
-			insertIn(installedApps.list[input], &runningApps);
+			cout << "   " << (installedApps.list[input].content.name) << " rodando.\n";
+			insertIn(installedApps.list[input].content, &runningApps);
 			sleep(1000);
 			initHome();
 		}
 		
 		if( uninstall ){
 			
-			int appRunning = hasApp(installedApps.list[input], runningApps),
-				homeApp = hasApp(installedApps.list[input], homeApps);
+			int appRunning = hasApp(installedApps.list[input].content, runningApps),
+				homeApp = hasApp(installedApps.list[input].content, homeApps);
 			
 			char response;
 		
 			if( appRunning > -1 ){
-				cout << "   " << installedApps.list[input].name << " Está executando. Desenha mesmo excluir? (S/N)";
+				cout << "   " << installedApps.list[input].content.name << " Está executando. Desenha mesmo excluir? (S/N)";
 				cin >> response;
 			}
 
 			if( appRunning == -1 || response == 's' || response == 'S' ){
 
-				cout << "   " << (installedApps.list[input].name) << " apagado.\n";
+				cout << "   " << (installedApps.list[input].content.name) << " apagado.\n";
 				
 				removeOf(input, &installedApps);
 				
@@ -253,8 +246,8 @@ void initRunning(){
 
 	setInterfaceTitle("  RODANDO ","Selecione para fechar");
 	
-	for(int i = 1, from = runningApps.il; from <= runningApps.fl; from++, i++ )
-		setItemList(i, runningApps.list[from].name);
+	for(int i = 1, from = runningApps.init; from != -1; from = runningApps.list[from].next, i++ )
+		setItemList(i, runningApps.list[from].content.name);
 
 	cout << "\n   0. Voltar\n";
 	
@@ -269,9 +262,9 @@ void initRunning(){
 		initRunning();
 	} else {
 
-		input += runningApps.il - 1;
+		input = getTheIndex(input, runningApps);
 
-		cout << runningApps.list[input].name << " fechado.\n";
+		cout << runningApps.list[input].content.name << " fechado.\n";
 		
 		sleep(1000);
 		removeOf( input, &runningApps );
@@ -283,17 +276,16 @@ void closeApp(){
 	
 	clearScreen;
 	cout << "\n\n\n\n\t\tFeito por: Judson Silva.\n\n\n\n";
-	cout << "Quantidade de movimentações feitas: " << moveLength;
-
+	
 	int length = countApps( installedApps );
 
 	if( length == 0 ) return;
 	
 	ofstream installedAppsFile(INSTALLED_APPS_FILE, ofstream::out | ofstream::trunc);
 
-	for(int i = installedApps.il; i <= installedApps.fl; i++){
-		installedAppsFile << installedApps.list[i].name << "|";
-		installedAppsFile << installedApps.list[i].size;
+	for(int i = installedApps.init; i != -1; i = installedApps.list[i].next){
+		installedAppsFile << installedApps.list[i].content.name << "|";
+		installedAppsFile << installedApps.list[i].content.size;
 		installedAppsFile << "\n";
 	}
 	
