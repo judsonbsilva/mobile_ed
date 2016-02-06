@@ -16,10 +16,10 @@ struct node {
 	// The app
 	app content;
 	// Next node
-	int next;
+	int next, previous;
 };
 
-struct llse {
+struct llde {
 	node list[APP_AMOUNT];
 	int init = -1, finish = -1, avaible = 0;
 };

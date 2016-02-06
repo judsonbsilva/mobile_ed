@@ -12,14 +12,14 @@ using namespace std;
 // Interface functions
 // #include "lib/interface.cpp"
 
-void showTest( llse storeApps ){
+void showTest( llde storeApps ){
 	debug(storeApps);
 	cout << "\n";
 }
 
 int main(){
 
-	llse storeApps = createLLSE();
+	llde storeApps = createLLDE();
 
 	string names[] = {"Google Keep", "Netshoes", "Ovo", "Facebook", "Solid Explorer", "Whatsapp", "Instagram", "Twitter"};
 	int sizes[] = {2, 3, 5, 1, 4, 0, 7, 5};

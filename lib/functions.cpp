@@ -17,11 +17,12 @@
 	#define clearScreen system("cls")
 #endif
 
-llse createLLSE(){
-	llse newList;
+llde createLLDE(){
+	llde newList;
 
 	for(int i = 0; i < APP_AMOUNT; i++){
 		newList.list[ i ].next = i+1;
+		newList.list[ i ].previous = i-1;
 		newList.list[ i ].content.size = -1;
 	}
 	
@@ -29,7 +30,7 @@ llse createLLSE(){
 }
 
 // Count amout of apps in array
-int countApps( llse apps ){
+int countApps( llde apps ){
 	int counter = 0;
 
 	for( int i = apps.init; i != -1; i = apps.list[i].next )
@@ -40,7 +41,7 @@ int countApps( llse apps ){
 };
 
 // This list has this app?
-int hasApp( app theApp, llse apps ){
+int hasApp( app theApp, llde apps ){
 
 	for(int i = apps.init; i != -1; i = apps.list[i].next )
 		if( apps.list[i].content.name == theApp.name )
@@ -50,7 +51,7 @@ int hasApp( app theApp, llse apps ){
 }
 
 // Debug function to print app list
-void debug( llse apps ){
+void debug( llde apps ){
 	
 	cout << "Init: " << apps.init << "    Finish: " << apps.finish << "\n";
 	cout << "Avaible: " << apps.avaible << "\n";
@@ -64,6 +65,7 @@ void debug( llse apps ){
 	for(int i = apps.init; i != -1; i = apps.list[i].next){
 		cout << "\n\t\tindx: " << i << "\n";
 		cout << "\t\tnext: " << apps.list[i].next << "\n";
+		cout << "\t\tprev: " << apps.list[i].previous << "\n";
 		cout << "\t{\n";
 		cout << "\t\tname: " << apps.list[i].content.name << "\n";
 		cout << "\t\tsize: " << apps.list[i].content.size << "\n";
@@ -74,7 +76,7 @@ void debug( llse apps ){
 }
 
 // Get the index of list to insert an app
-int getIndexToInsert( app thisApp, llse apps ){
+int getIndexToInsert( app thisApp, llde apps ){
 	
 	// If is empty
 	if( countApps(apps) == 0 )
@@ -98,14 +100,15 @@ int getIndexToInsert( app thisApp, llse apps ){
 
 }
 
-int getAndUpdateAvaible( llse *apps ){
+int getAndUpdateAvaible( llde *apps ){
 	int index = apps->list[ apps->avaible ].next;
 	apps->list[ apps->avaible ].next = apps->list[ index ].next;
+	apps->list[ index ].previous = apps->avaible;
 	return index;
 }
 
 // Insert an app in a index on the list
-void insertIn( app currentApp, llse *apps ){
+void insertIn( app currentApp, llde *apps ){
 	
 	int length = countApps(*apps),
 		avaible = getAndUpdateAvaible( &(*apps) );
@@ -114,6 +117,7 @@ void insertIn( app currentApp, llse *apps ){
 	if( length == 0 ){
 		
 		apps->list[ avaible ].next = -1;
+		apps->list[ avaible ].previous = -1;
 		apps->list[ avaible ].content = currentApp;
 		
 		apps->finish = avaible;
@@ -127,16 +131,21 @@ void insertIn( app currentApp, llse *apps ){
 	// In init
 	if( index == -1 ){
 
-		apps->list[ avaible ].content = currentApp;
-		apps->list[ avaible ].next    = apps->init;
+		apps->list[ avaible ].content  = currentApp;
+		apps->list[ avaible ].next     = apps->init;
+		apps->list[ avaible ].previous = -1;
+		
+		// if( apps->list[ index ].next != -1 )
+		// apps->list[ apps->list[ index ].next ].previous = avaible;
+		
 		apps->init = avaible;
 		
 	// In finish		
 	} else if( index == apps->finish ){
 
-		apps->list[ avaible ].content = currentApp;
-		apps->list[ avaible ].next    = -1;
-	
+		apps->list[ avaible ].content  = currentApp;
+		apps->list[ avaible ].next     = -1;
+		apps->list[ avaible ].previous = apps->finish; 
 		apps->list[ apps->finish ].next = avaible;
 		apps->finish = avaible;
 
@@ -144,12 +153,13 @@ void insertIn( app currentApp, llse *apps ){
 	} else {
 		apps->list[ avaible ].content = currentApp;
 		apps->list[ avaible ].next = apps->list[index].next;
+		apps->list[ avaible ].previous = index;
 		apps->list[ index ].next = avaible;
 	}
 	
 }
 
-void removeOf( int index, llse *apps ){
+void removeOf( int index, llde *apps ){
 	
 	int length = countApps( *apps );
 	
@@ -171,31 +181,21 @@ void removeOf( int index, llse *apps ){
 		apps->avaible = index;
 	// In finish
 	} else if( index == apps->finish ){
-		for(int i = apps->init; i != -1; i = apps->list[i].next){
-			if( apps->list[i].next == index ){
-				apps->list[i].next = -1;
-				apps->finish = i;
-				break;
-			}
-		}
-		apps->list[index].next = apps->avaible;
+		apps->list[ apps->list[ index ].previous ].next = -1;
+		apps->finish = apps->list[ index ].previous;
+		apps->list[ index ].next = apps->avaible;
 		apps->avaible = index;
 	// Between
 	} else {
-		for(int i = apps->init; i != -1; i = apps->list[i].next){
-			if( apps->list[i].next == index ){
-				apps->list[i].next = apps->list[index].next;
-				break;
-			}
-		}
-		apps->list[index].next = apps->avaible;
+		apps->list[ apps->list[index].previous ].next = apps->list[ index ].next;
+		apps->list[ index ].next = apps->avaible;
 		apps->avaible = index;
 	}
 
 }
 
 // get apps in a file
-void getApps( ifstream & file, llse *apps ){
+void getApps( ifstream & file, llde *apps ){
 	
 	string content;
 	app current;
