@@ -28,7 +28,7 @@ int main(){
 
 	app example;
 
-	for(int i = 0; i < 8; i++){
+	for(int i = 0; i < 5; i++){
 		example.name = names[i];
 		example.size = sizes[i];
 
@@ -40,7 +40,7 @@ int main(){
 	showTest( storeApps );
 	removeOf( storeApps.finish, &storeApps );
 	showTest( storeApps );
-	removeOf( 3, &storeApps );
+	removeOf( 2, &storeApps );
 	showTest( storeApps );
 
 	// showTest();

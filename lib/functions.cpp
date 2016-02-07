@@ -135,8 +135,8 @@ void insertIn( app currentApp, llde *apps ){
 		apps->list[ avaible ].next     = apps->init;
 		apps->list[ avaible ].previous = -1;
 		
-		// if( apps->list[ index ].next != -1 )
-		// apps->list[ apps->list[ index ].next ].previous = avaible;
+		if( length > 1 )
+			apps->list[ apps->init ].previous = avaible;
 		
 		apps->init = avaible;
 		
@@ -154,6 +154,7 @@ void insertIn( app currentApp, llde *apps ){
 		apps->list[ avaible ].content = currentApp;
 		apps->list[ avaible ].next = apps->list[index].next;
 		apps->list[ avaible ].previous = index;
+		apps->list[ apps->list[ index ].next ].previous = avaible;
 		apps->list[ index ].next = avaible;
 	}
 	
@@ -177,17 +178,19 @@ void removeOf( int index, llde *apps ){
 	// In init
 	if( index == apps->init ){
 		apps->init = apps->list[index].next;
+		apps->list[ apps->init ].previous = -1;
 		apps->list[index].next = apps->avaible;
 		apps->avaible = index;
 	// In finish
 	} else if( index == apps->finish ){
-		apps->list[ apps->list[ index ].previous ].next = -1;
 		apps->finish = apps->list[ index ].previous;
+		apps->list[ apps->finish ].next = -1;
 		apps->list[ index ].next = apps->avaible;
 		apps->avaible = index;
 	// Between
 	} else {
 		apps->list[ apps->list[index].previous ].next = apps->list[ index ].next;
+		apps->list[ apps->list[ index ].next ].previous = apps->list[ index ].previous; 
 		apps->list[ index ].next = apps->avaible;
 		apps->avaible = index;
 	}
