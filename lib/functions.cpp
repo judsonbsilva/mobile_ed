@@ -40,6 +40,13 @@ int countApps( llde apps ){
 	return counter;
 };
 
+int getTheIndex( int number, llde apps ){
+	for(int i = apps.init, counter = 1; i != -1; i = apps.list[i].next, counter++ )
+		if( counter == number ) return i;
+
+	return -1;
+}
+
 // This list has this app?
 int hasApp( app theApp, llde apps ){
 
