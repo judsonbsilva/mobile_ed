@@ -24,6 +24,10 @@ struct llde {
 	int init = -1, finish = -1, avaible = 0;
 };
 
+struct pilha {
+	llde list;
+};
+
 llde storeApps, installedApps, homeApps, runningApps;
 
 // Moviments length

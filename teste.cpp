@@ -7,19 +7,19 @@ using namespace std;
 // Variables and constants
 #include "lib/variables.h"
 // List functions
-#include "lib/functions.cpp"
+#include "lib/llde.h"
 
 // Interface functions
 // #include "lib/interface.cpp"
 
 void showTest( llde storeApps ){
-	debug(storeApps);
+	LLDEdebug(storeApps);
 	cout << "\n";
 }
 
 int main(){
 
-	llde storeApps = createLLDE();
+	llde storeApps = LLDEcreate();
 
 	string names[] = {"Google Keep", "Netshoes", "Ovo", "Facebook", "Solid Explorer", "Whatsapp", "Instagram", "Twitter"};
 	int sizes[] = {2, 3, 5, 1, 4, 0, 7, 5};
@@ -32,17 +32,20 @@ int main(){
 		example.name = names[i];
 		example.size = sizes[i];
 
-		insertIn( example, &storeApps );
+		LLDEinsertIn( example, &storeApps );
 	}
 
 	showTest( storeApps );
-	removeOf( storeApps.init, &storeApps );
+	LLDEremoveOf( storeApps.init, &storeApps );
 	showTest( storeApps );
-	removeOf( storeApps.finish, &storeApps );
+	LLDEremoveOf( storeApps.finish, &storeApps );
 	showTest( storeApps );
-	removeOf( 2, &storeApps );
+	LLDEremoveOf( 2, &storeApps );
 	showTest( storeApps );
-
+	LLDEremoveOf( storeApps.finish, &storeApps );
+	showTest( storeApps );
+	LLDEremoveOf( storeApps.init, &storeApps );
+	showTest( storeApps );
 	// showTest();
 
 	// removeOf( 52, &storeApps );

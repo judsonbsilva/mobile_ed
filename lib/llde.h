@@ -17,7 +17,7 @@
 	#define clearScreen system("cls")
 #endif
 
-llde createLLDE(){
+llde LLDEcreate(){
 	llde newList;
 
 	for(int i = 0; i < APP_AMOUNT; i++){
@@ -30,7 +30,7 @@ llde createLLDE(){
 }
 
 // Count amout of apps in array
-int countApps( llde apps ){
+int LLDEcountApps( llde apps ){
 	int counter = 0;
 
 	for( int i = apps.init; i != -1; i = apps.list[i].next )
@@ -40,7 +40,7 @@ int countApps( llde apps ){
 	return counter;
 };
 
-int getTheIndex( int number, llde apps ){
+int LLDEgetTheIndex( int number, llde apps ){
 	for(int i = apps.init, counter = 1; i != -1; i = apps.list[i].next, counter++ )
 		if( counter == number ) return i;
 
@@ -48,7 +48,7 @@ int getTheIndex( int number, llde apps ){
 }
 
 // This list has this app?
-int hasApp( app theApp, llde apps ){
+int LLDEhasApp( app theApp, llde apps ){
 
 	for(int i = apps.init; i != -1; i = apps.list[i].next )
 		if( apps.list[i].content.name == theApp.name )
@@ -58,7 +58,7 @@ int hasApp( app theApp, llde apps ){
 }
 
 // Debug function to print app list
-void debug( llde apps ){
+void LLDEdebug( llde apps ){
 	
 	cout << "Init: " << apps.init << "    Finish: " << apps.finish << "\n";
 	cout << "Avaible: " << apps.avaible << "\n";
@@ -83,10 +83,10 @@ void debug( llde apps ){
 }
 
 // Get the index of list to insert an app
-int getIndexToInsert( app thisApp, llde apps ){
+int LLDEgetIndexToInsert( app thisApp, llde apps ){
 	
 	// If is empty
-	if( countApps(apps) == 0 )
+	if( LLDEcountApps(apps) == 0 )
 		return apps.list[ apps.avaible ].next;
 	
 	int lastIndex = 0;
@@ -107,7 +107,7 @@ int getIndexToInsert( app thisApp, llde apps ){
 
 }
 
-int getAndUpdateAvaible( llde *apps ){
+int LLDEgetAndUpdateAvaible( llde *apps ){
 	int index = apps->list[ apps->avaible ].next;
 	apps->list[ apps->avaible ].next = apps->list[ index ].next;
 	apps->list[ index ].previous = apps->avaible;
@@ -115,10 +115,10 @@ int getAndUpdateAvaible( llde *apps ){
 }
 
 // Insert an app in a index on the list
-void insertIn( app currentApp, llde *apps ){
+void LLDEinsertIn( app currentApp, llde *apps ){
 	
-	int length = countApps(*apps),
-		avaible = getAndUpdateAvaible( &(*apps) );
+	int length = LLDEcountApps(*apps),
+		avaible = LLDEgetAndUpdateAvaible( &(*apps) );
 
 	// If list is empty
 	if( length == 0 ){
@@ -133,7 +133,7 @@ void insertIn( app currentApp, llde *apps ){
 		return;
 	}
 
-	int index   = getIndexToInsert( currentApp, *apps);
+	int index   = LLDEgetIndexToInsert( currentApp, *apps);
 
 	// In init
 	if( index == -1 ){
@@ -167,9 +167,9 @@ void insertIn( app currentApp, llde *apps ){
 	
 }
 
-void removeOf( int index, llde *apps ){
+void LLDEremoveOf( int index, llde *apps ){
 	
-	int length = countApps( *apps );
+	int length = LLDEcountApps( *apps );
 	
 	if( length == 1 ){
 
@@ -205,7 +205,7 @@ void removeOf( int index, llde *apps ){
 }
 
 // get apps in a file
-void getApps( ifstream & file, llde *apps ){
+void LLDEgetApps( ifstream & file, llde *apps ){
 	
 	string content;
 	app current;
@@ -222,6 +222,6 @@ void getApps( ifstream & file, llde *apps ){
 		current.name = content.substr(0, index);
 		current.size = stoi( content.substr(index + 1, content.length()) );
 		
-		insertIn(current, apps);
+		LLDEinsertIn(current, apps);
 	}
 }

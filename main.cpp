@@ -16,10 +16,10 @@ using namespace std;
 int main () {
 	
 	// Global vars
-	storeApps = createLLDE();
-	installedApps = createLLDE();
-	homeApps = createLLDE();
-	runningApps = createLLDE();
+	storeApps = LLDEcreate();
+	installedApps = LLDEcreate();
+	homeApps = LLDEcreate();
+	runningApps = LLDEcreate();
 
 	// Files do read
 	ifstream installedAppsFile;
@@ -27,18 +27,18 @@ int main () {
 	
 	// Load instaled apps in lists
 	installedAppsFile.open( INSTALLED_APPS_FILE  );
-	getApps( installedAppsFile, &installedApps);
+	LLDEgetApps( installedAppsFile, &installedApps);
 	installedAppsFile.close();
 	
 	// Pass installed apps to home
 	int counter = 1;
 	for(int i = installedApps.init; i != -1; i = installedApps.list[i].next, counter++)
 		if( counter < 10 )
-			insertIn( installedApps.list[i].content, &homeApps);
+			LLDEinsertIn( installedApps.list[i].content, &homeApps);
 	
 	// Load app store
 	storeAppsFile.open( STORE_FILE );
-	getApps( storeAppsFile, &storeApps);
+	LLDEgetApps( storeAppsFile, &storeApps);
 	storeAppsFile.close();
 
 	// Call interface here
