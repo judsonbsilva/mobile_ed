@@ -8,13 +8,13 @@ using namespace std;
 #include "lib/variables.h"
 
 // List functions
-#include "lib/functions.cpp"
+#include "lib/llv.h"
 
 // Interface functions
 // #include "lib/interface.cpp"
 
 void showTest(){
-	debug(storeApps);
+	LLVdebug(storeApps);
 	cout << "\n";
 }
 
@@ -29,16 +29,16 @@ int main(){
 		test.name = names[i];
 		test.size = sizes[i];
 
-		insertIn( test, &storeApps );
+		LLVinsertIn( test, &storeApps );
 	}
 
 	showTest();
 	
-	removeOf( 50, &storeApps );
+	LLVremoveOf( 50, &storeApps );
 
 	showTest();
 
-	removeOf( 52, &storeApps );
+	LLVremoveOf( 52, &storeApps );
 
 	showTest();
 

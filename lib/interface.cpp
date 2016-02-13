@@ -38,8 +38,8 @@ void initStore(){
 
 	setInterfaceTitle("   STORE  ", "Selecione um para instalar");
 
-	int length = countApps(storeApps),
-		homeAppsLength = countApps(homeApps);
+	int length = LLVcountApps(storeApps),
+		homeAppsLength = LLVcountApps(homeApps);
 
 	int i = 1;
 	for(int from = storeApps.il; from <= storeApps.fl; from++, i++ )
@@ -64,16 +64,16 @@ void initStore(){
 		//cout << "\nIL: " <<  storeApps.il << " I: "<< input << "\n"; 
 		//cout << storeApps.list[input].name << "\n";
 		
-		if( hasApp(storeApps.list[input], installedApps) > -1 ){
+		if( LLVhasApp(storeApps.list[input], installedApps) > -1 ){
 			cout << "   " << storeApps.list[input].name << " já instalado.\n";
 			sleep(1000);
 			initStore();
 		} else {
 			cout << "   " << storeApps.list[input].name << " instalado com sucesso.\n";
-			insertIn(storeApps.list[input], &installedApps);
+			LLVinsertIn(storeApps.list[input], &installedApps);
 				
 			if( homeAppsLength < 10 )
-				insertIn(storeApps.list[input], &homeApps);
+				LLVinsertIn(storeApps.list[input], &homeApps);
 			
 			sleep(1000);
 			initHome();
@@ -94,7 +94,7 @@ void initHome(){
 	setItemList(0, "Voltar\n");
 	cout << "-------------------------------\n    Área de Trabalho\n-------------------------------\n";
 
-	int homeLength = countApps(homeApps);
+	int homeLength = LLVcountApps(homeApps);
 
 	if( homeLength > 0 ){
 		
@@ -133,13 +133,13 @@ void initHome(){
 
 		input += homeApps.il + 3;	
 		
-		if( hasApp(homeApps.list[ input ], runningApps) > -1 ){
+		if( LLVhasApp(homeApps.list[ input ], runningApps) > -1 ){
 			cout << "   " << (homeApps.list[input].name) << " já está sendo executado.\n";
 			sleep(1000);
 			initHome();
 		} else {
 			cout << "   " << (homeApps.list[input].name) << " rodando.\n";
-			insertIn(homeApps.list[input], &runningApps);
+			LLVinsertIn(homeApps.list[input], &runningApps);
 			sleep(1000);
 			initHome();
 		}
@@ -152,7 +152,7 @@ void initMyApps(){
 
 	setInterfaceTitle(" MEUS APPS","");
 	
-	int length = countApps(installedApps);
+	int length = LLVcountApps(installedApps);
 
 	if( length == 0 ){
 		cout << "  Você não possui apps instalados.\n\n";
@@ -188,21 +188,21 @@ void initMyApps(){
 		
 		input += installedApps.il - 1;
 		
-		if( !uninstall && hasApp(installedApps.list[input], runningApps) > -1 ){
+		if( !uninstall && LLVhasApp(installedApps.list[input], runningApps) > -1 ){
 			cout << "   " << (installedApps.list[input].name) << " já está sendo executado.\n";
 			sleep(1000);
 			initMyApps();
 		} else if( !uninstall ){
 			cout << "   " << (installedApps.list[input].name) << " rodando.\n";
-			insertIn(installedApps.list[input], &runningApps);
+			LLVinsertIn(installedApps.list[input], &runningApps);
 			sleep(1000);
 			initHome();
 		}
 		
 		if( uninstall ){
 			
-			int appRunning = hasApp(installedApps.list[input], runningApps),
-				homeApp = hasApp(installedApps.list[input], homeApps);
+			int appRunning = LLVhasApp(installedApps.list[input], runningApps),
+				homeApp = LLVhasApp(installedApps.list[input], homeApps);
 			
 			char response;
 		
@@ -215,16 +215,16 @@ void initMyApps(){
 
 				cout << "   " << (installedApps.list[input].name) << " apagado.\n";
 				
-				removeOf(input, &installedApps);
+				LLVremoveOf(input, &installedApps);
 				
 				if( appRunning > -1 ){
 					cout << "HEEEEREE!222222222";
-					removeOf(appRunning, &runningApps);
+					LLVremoveOf(appRunning, &runningApps);
 				}
 				
 				if( homeApp > -1 ){
 					cout << "HEEEEREE!";
-					removeOf(homeApp, &homeApps);
+					LLVremoveOf(homeApp, &homeApps);
 				}
 
 				sleep(1000);
@@ -242,7 +242,7 @@ void initRunning(){
 	
 	setInterfaceTitle("  RODANDO ","");
 	
-	int length = countApps(runningApps);
+	int length = LLVcountApps(runningApps);
 
 	if( length == 0 ){
 		cout << "  Você não possui apps rodando.\n\n";
@@ -274,7 +274,7 @@ void initRunning(){
 		cout << runningApps.list[input].name << " fechado.\n";
 		
 		sleep(1000);
-		removeOf( input, &runningApps );
+		LLVremoveOf( input, &runningApps );
 		initHome();
 	}
 }
@@ -285,7 +285,7 @@ void closeApp(){
 	cout << "\n\n\n\n\t\tFeito por: Judson Silva.\n\n\n\n";
 	cout << "Quantidade de movimentações feitas: " << moveLength;
 
-	int length = countApps( installedApps );
+	int length = LLVcountApps( installedApps );
 
 	if( length == 0 ) return;
 	

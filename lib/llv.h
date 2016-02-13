@@ -18,12 +18,12 @@
 #endif
 
 // Count amout of apps in array
-int countApps( llv appList ){
+int LLVcountApps( llv appList ){
 	return ( appList.il == -1 ) && (appList.fl == -1) ? 0: appList.fl - appList.il + 1;
 };
 
 // This list has this app?
-int hasApp( app theApp, llv apps ){
+int LLVhasApp( app theApp, llv apps ){
 
 	for(int i = apps.il, length = apps.fl; i < length; i++ )
 		if( apps.list[i].name == theApp.name )
@@ -33,7 +33,7 @@ int hasApp( app theApp, llv apps ){
 }
 
 // Debug function to print app list
-void debug( llv apps ){
+void LLVdebug( llv apps ){
 	
 	cout << "IA: " << apps.ia << "    FA: " << apps.fa << "\n";
 	cout << "IL: " << apps.il << "    FL: " << apps.fl << "\n\n";
@@ -56,10 +56,10 @@ void debug( llv apps ){
 }
 
 // Get the index of list to insert an app
-int getIndexToInsert( app thisApp, llv *apps ){
+int LLVgetIndexToInsert( app thisApp, llv *apps ){
 	
 	// If is empty
-	if( countApps(*apps) == 0 ) return APP_AMOUNT/2;
+	if( LLVcountApps(*apps) == 0 ) return APP_AMOUNT/2;
 
 	for(int i = apps->il; i <= apps->fl; i++)
 		if( thisApp.size <= apps->list[i].size )
@@ -69,7 +69,7 @@ int getIndexToInsert( app thisApp, llv *apps ){
 }
 
 // Move elements to rigth
-void moveRigth(int from, int to, llv * apps ){
+void LLVmoveRigth(int from, int to, llv * apps ){
 	
 	// If not space in right
 	if( apps->fl + 1 == apps->fa ) return;
@@ -82,7 +82,7 @@ void moveRigth(int from, int to, llv * apps ){
 }
 
 //Move elements to left
-void moveLeft(int from, int to, llv *apps ){
+void LLVmoveLeft(int from, int to, llv *apps ){
 	
 	// If not space in left
 	if( apps->il - 1 == apps->ia ) return;
@@ -95,9 +95,9 @@ void moveLeft(int from, int to, llv *apps ){
 }
 
 // Insert an app in a index on the list
-void insertIn( app currentApp, llv *apps ){
+void LLVinsertIn( app currentApp, llv *apps ){
 	
-	int length = countApps(*apps);
+	int length = LLVcountApps(*apps);
 
 	// If list is empty
 	if( length == 0 ){
@@ -109,7 +109,7 @@ void insertIn( app currentApp, llv *apps ){
 		return;
 	}
 
-	int index = getIndexToInsert( currentApp, &*apps);
+	int index = LLVgetIndexToInsert( currentApp, &*apps);
 	
 	//cout << "I: " << index << "\n" << "Size: " << currentApp.size << "\n\n"; 
 	
@@ -126,7 +126,7 @@ void insertIn( app currentApp, llv *apps ){
 			apps->list[ apps->fl ] = currentApp;
 			apps->fl += 1;
 		} else {
-			moveLeft( apps->il, apps->fl, &*apps );
+			LLVmoveLeft( apps->il, apps->fl, &*apps );
 			apps->il -= 1;
 			apps->list[ apps->fl ] = apps->list[ apps->fl - 1 ];
 			apps->list[ apps->fl - 1 ] = currentApp;
@@ -141,7 +141,7 @@ void insertIn( app currentApp, llv *apps ){
 			apps->il -= 1;
 			apps->list[ apps->il ] = currentApp;
 		} else {
-			moveRigth( apps->il, apps->fl, &*apps );
+			LLVmoveRigth( apps->il, apps->fl, &*apps );
 			apps->fl += 1;
 			apps->list[ apps->il ] = apps->list[ apps->il + 1 ];
 			apps->list[ apps->il + 1 ] = currentApp;
@@ -156,7 +156,7 @@ void insertIn( app currentApp, llv *apps ){
 			apps->fl += 1;
 			apps->list[ apps->fl ] = currentApp;
 		} else {
-			moveLeft( apps->il, apps->fl, &*apps );
+			LLVmoveLeft( apps->il, apps->fl, &*apps );
 			apps->il -= 1;
 			apps->list[ apps->fl ] = currentApp;
 		}
@@ -167,21 +167,21 @@ void insertIn( app currentApp, llv *apps ){
 	// Between
 	// If left has more elements
 	if( abs( index - apps->il ) > abs( apps->fl - index ) ){
-		moveRigth( index, apps->fl, &*apps);
+		LLVmoveRigth( index, apps->fl, &*apps);
 		apps->fl += 1;
 		apps->list[index] = currentApp;
 	// If right has more elements
 	} else {
-		moveLeft( apps->il, index, &*apps);
+		LLVmoveLeft( apps->il, index, &*apps);
 		apps->il -= 1;
 		apps->list[index - 1] = currentApp;
 	}
 	
 }
 
-void removeOf( int index, llv *apps ){
+void LLVremoveOf( int index, llv *apps ){
 	
-	int length = countApps( *apps );
+	int length = LLVcountApps( *apps );
 	
 	if( length == 1 ){
 
@@ -203,17 +203,17 @@ void removeOf( int index, llv *apps ){
 
 	// If left has more elements
 	if( abs( index - apps->il ) > abs( apps->fl - index ) ){
-		moveLeft( index + 1, apps->fl, &*apps);
+		LLVmoveLeft( index + 1, apps->fl, &*apps);
 		apps->fl -= 1;
 	// If right has more elements
 	} else {
-		moveRigth( apps->il, index - 1, &*apps);
+		LLVmoveRigth( apps->il, index - 1, &*apps);
 		apps->il += 1;
 	}
 }
 
 // get apps in a file
-void getApps( ifstream & file, llv *apps ){
+void LLVgetApps( ifstream & file, llv *apps ){
 	
 	string content;
 	app current;
@@ -232,6 +232,6 @@ void getApps( ifstream & file, llv *apps ){
 			content.substr(index + 1, content.length())
 		);
 		
-		insertIn(current, &(*apps));
+		LLVinsertIn(current, &(*apps));
 	}
 }

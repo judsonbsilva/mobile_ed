@@ -8,7 +8,7 @@ using namespace std;
 #include "lib/variables.h"
 
 // List functions
-#include "lib/functions.cpp"
+#include "lib/llv.h"
 
 // Interface functions
 #include "lib/interface.cpp"
@@ -23,16 +23,16 @@ int main () {
 	
 	// Load instaled apps in lists
 	installedAppsFile.open( INSTALLED_APPS_FILE  );
-		getApps( installedAppsFile, &installedApps);
+		LLVgetApps( installedAppsFile, &installedApps);
 	installedAppsFile.close();
 	
 	// Pass installed apps to home
 	for(int i = installedApps.il; (i <= installedApps.fl && ((i - installedApps.il) < 10)); i++)
-		insertIn( installedApps.list[i], &homeApps);
+		LLVinsertIn( installedApps.list[i], &homeApps);
 	
 	// Load app store
 	storeAppsFile.open( STORE_FILE );
-		getApps( storeAppsFile, &storeApps);
+		LLVgetApps( storeAppsFile, &storeApps);
 	storeAppsFile.close();
 
 	// Call interface here
