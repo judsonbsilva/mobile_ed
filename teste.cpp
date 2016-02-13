@@ -7,19 +7,19 @@ using namespace std;
 // Variables and constants
 #include "lib/variables.h"
 // List functions
-#include "lib/functions.cpp"
+#include "lib/llse.h"
 
 // Interface functions
 // #include "lib/interface.cpp"
 
 void showTest( llse storeApps ){
-	debug(storeApps);
+	LLSEdebug(storeApps);
 	cout << "\n";
 }
 
 int main(){
 
-	llse storeApps = createLLSE();
+	llse storeApps = LLSEcreate();
 
 	string names[] = {"Google Keep", "Netshoes", "Ovo", "Facebook", "Solid Explorer", "Whatsapp", "Instagram", "Twitter"};
 	int sizes[] = {2, 3, 5, 1, 4, 0, 7, 5};
@@ -32,15 +32,15 @@ int main(){
 		example.name = names[i];
 		example.size = sizes[i];
 
-		insertIn( example, &storeApps );
+		LLSEinsertIn( example, &storeApps );
 	}
 
 	showTest( storeApps );
-	removeOf( storeApps.init, &storeApps );
+	LLSEremoveOf( storeApps.init, &storeApps );
 	showTest( storeApps );
-	removeOf( storeApps.finish, &storeApps );
+	LLSEremoveOf( storeApps.finish, &storeApps );
 	showTest( storeApps );
-	removeOf( 3, &storeApps );
+	LLSEremoveOf( 3, &storeApps );
 	showTest( storeApps );
 
 	// showTest();
