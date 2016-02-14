@@ -1,18 +1,23 @@
-// Node of llse
-struct node2 {
-	// The app
-	app content;
-	// Next node
-	int next, previous;
-};
+// If is linux
+#ifdef __linux__
+	
+	#define clearScreen cout << "\033c"
+	#include <chrono>
+	#include <thread>
+	
+	void sleep( int milliseconds ){
+		std::this_thread::sleep_for(
+			std::chrono::milliseconds( milliseconds )
+		);
+	}
 
-struct llde {
-	node2 list[APP_AMOUNT];
-	int init = -1, finish = -1, avaible = 0;
-};
+// If is Windows
+#elif _WIN32
+	#include <conio.h>
+	#define clearScreen system("cls")
+#endif
 
-
-llde LLDEcreate(){
+llde createLLDE(){
 	llde newList;
 
 	for(int i = 0; i < APP_AMOUNT; i++){
@@ -25,7 +30,7 @@ llde LLDEcreate(){
 }
 
 // Count amout of apps in array
-int LLDEcountApps( llde apps ){
+int countApps( llde apps ){
 	int counter = 0;
 
 	for( int i = apps.init; i != -1; i = apps.list[i].next )
@@ -35,7 +40,7 @@ int LLDEcountApps( llde apps ){
 	return counter;
 };
 
-int LLDEgetTheIndex( int number, llde apps ){
+int getTheIndex( int number, llde apps ){
 	for(int i = apps.init, counter = 1; i != -1; i = apps.list[i].next, counter++ )
 		if( counter == number ) return i;
 
@@ -43,7 +48,7 @@ int LLDEgetTheIndex( int number, llde apps ){
 }
 
 // This list has this app?
-int LLDEhasApp( app theApp, llde apps ){
+int hasApp( app theApp, llde apps ){
 
 	for(int i = apps.init; i != -1; i = apps.list[i].next )
 		if( apps.list[i].content.name == theApp.name )
@@ -53,7 +58,7 @@ int LLDEhasApp( app theApp, llde apps ){
 }
 
 // Debug function to print app list
-void LLDEdebug( llde apps ){
+void debug( llde apps ){
 	
 	cout << "Init: " << apps.init << "    Finish: " << apps.finish << "\n";
 	cout << "Avaible: " << apps.avaible << "\n";
@@ -78,10 +83,10 @@ void LLDEdebug( llde apps ){
 }
 
 // Get the index of list to insert an app
-int LLDEgetIndexToInsert( app thisApp, llde apps ){
+int getIndexToInsert( app thisApp, llde apps ){
 	
 	// If is empty
-	if( LLDEcountApps(apps) == 0 )
+	if( countApps(apps) == 0 )
 		return apps.list[ apps.avaible ].next;
 	
 	int lastIndex = 0;
@@ -102,7 +107,7 @@ int LLDEgetIndexToInsert( app thisApp, llde apps ){
 
 }
 
-int LLDEgetAndUpdateAvaible( llde *apps ){
+int getAndUpdateAvaible( llde *apps ){
 	int index = apps->list[ apps->avaible ].next;
 	apps->list[ apps->avaible ].next = apps->list[ index ].next;
 	apps->list[ index ].previous = apps->avaible;
@@ -110,10 +115,10 @@ int LLDEgetAndUpdateAvaible( llde *apps ){
 }
 
 // Insert an app in a index on the list
-void LLDEinsertIn( app currentApp, llde *apps ){
+void insertIn( app currentApp, llde *apps ){
 	
-	int length = LLDEcountApps(*apps),
-		avaible = LLDEgetAndUpdateAvaible( &(*apps) );
+	int length = countApps(*apps),
+		avaible = getAndUpdateAvaible( &(*apps) );
 
 	// If list is empty
 	if( length == 0 ){
@@ -128,7 +133,7 @@ void LLDEinsertIn( app currentApp, llde *apps ){
 		return;
 	}
 
-	int index   = LLDEgetIndexToInsert( currentApp, *apps);
+	int index   = getIndexToInsert( currentApp, *apps);
 
 	// In init
 	if( index == -1 ){
@@ -162,9 +167,9 @@ void LLDEinsertIn( app currentApp, llde *apps ){
 	
 }
 
-void LLDEremoveOf( int index, llde *apps ){
+void removeOf( int index, llde *apps ){
 	
-	int length = LLDEcountApps( *apps );
+	int length = countApps( *apps );
 	
 	if( length == 1 ){
 
@@ -200,7 +205,7 @@ void LLDEremoveOf( int index, llde *apps ){
 }
 
 // get apps in a file
-void LLDEgetApps( ifstream & file, llde *apps ){
+void getApps( ifstream & file, llde *apps ){
 	
 	string content;
 	app current;
@@ -217,6 +222,6 @@ void LLDEgetApps( ifstream & file, llde *apps ){
 		current.name = content.substr(0, index);
 		current.size = stoi( content.substr(index + 1, content.length()) );
 		
-		LLDEinsertIn(current, apps);
+		insertIn(current, apps);
 	}
 }

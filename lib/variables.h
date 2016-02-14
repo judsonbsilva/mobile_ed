@@ -6,25 +6,27 @@
 // Max amount apps
 #define APP_AMOUNT 100
 
+// If is linux
+#ifdef __linux__
+	
+	#define clearScreen cout << "\033c"
+	#include <chrono>
+	#include <thread>
+	
+	void sleep( int milliseconds ){
+		std::this_thread::sleep_for(
+			std::chrono::milliseconds( milliseconds )
+		);
+	}
+
+// If is Windows
+#elif _WIN32
+	#include <conio.h>
+	#define clearScreen system("cls")
+#endif
+
 // Define app struct
 struct app {
 	string name;
 	int size;
 };
-// Node of llse
-struct node {
-	// The app
-	app content;
-	// Next node
-	int next, previous;
-};
-
-struct llde {
-	node list[APP_AMOUNT];
-	int init = -1, finish = -1, avaible = 0;
-};
-
-llde storeApps, installedApps, homeApps, runningApps;
-
-// Moviments length
-int moveLength = 0;

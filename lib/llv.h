@@ -1,22 +1,3 @@
-// If is linux
-#ifdef __linux__
-	
-	#define clearScreen cout << "\033c"
-	#include <chrono>
-	#include <thread>
-	
-	void sleep( int milliseconds ){
-		std::this_thread::sleep_for(
-			std::chrono::milliseconds( milliseconds )
-		);
-	}
-
-// If is Windows
-#elif _WIN32
-	#include <conio.h>
-	#define clearScreen system("cls")
-#endif
-
 // Count amout of apps in array
 int LLVcountApps( llv appList ){
 	return ( appList.il == -1 ) && (appList.fl == -1) ? 0: appList.fl - appList.il + 1;

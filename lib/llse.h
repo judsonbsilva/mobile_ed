@@ -1,21 +1,16 @@
-// If is linux
-#ifdef __linux__
-	
-	#define clearScreen cout << "\033c"
-	#include <chrono>
-	#include <thread>
-	
-	void sleep( int milliseconds ){
-		std::this_thread::sleep_for(
-			std::chrono::milliseconds( milliseconds )
-		);
-	}
+// Node of llse
+struct node {
+	// The app
+	app content;
+	// Next node
+	int previous;
+};
 
-// If is Windows
-#elif _WIN32
-	#include <conio.h>
-	#define clearScreen system("cls")
-#endif
+struct llse {
+	node list[APP_AMOUNT];
+	int init = -1, finish = -1, avaible = 0;
+};
+
 
 llse LLSEcreate(){
 	llse newList;

@@ -7,7 +7,10 @@ using namespace std;
 // Variables and constants
 #include "lib/variables.h"
 // List functions
-#include "lib/functions.cpp"
+#include "lib/llde.h"
+#include "lib/llse.h"
+#include "lib/llv.h"
+#include "lib/pilha.h"
 // Interface functions
 #include "lib/interface.cpp"
 
