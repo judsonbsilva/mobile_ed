@@ -12,19 +12,21 @@ using namespace std;
 #include "lib/llv.h"
 #include "lib/pilha.h"
 #include "lib/fila.h"
+
+llv storeApps;
+llde installedApps, runningApps;
+llse homeApps;
+fila appsToInstall;
+
 // Interface functions
 #include "lib/interface.cpp"
 
-
-
 int main () {
 	
-	llv storeApps;
-	llde installedApps = LLDEcreate();
-	llde runningApps = LLDEcreate();
-	llse homeApps = LLSEcreate();
-	fila appsToInstall;
-
+	installedApps = LLDEcreate();
+	runningApps = LLDEcreate();
+	homeApps = LLSEcreate();
+	
 	// Files do read
 	ifstream installedAppsFile;
 	ifstream storeAppsFile;

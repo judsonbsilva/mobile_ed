@@ -41,12 +41,8 @@ void initStore(){
 	int length = LLVcountApps(storeApps),
 		homeAppsLength = LLSEcountApps(homeApps);
 
-	int i = 1;
-	for(
-		int from = storeApps.init;
-			from != -1;
-			from = storeApps.list[from].next, i++ )
-		setItemList(i, storeApps.list[from].content.name);
+	for(int i = 1, from = storeApps.il; from <= storeApps.fl; from++, i++ )
+		setItemList(i, storeApps.list[from].name);
 
 	cout << "\n";
 	setItemList(0, "Voltar\n");
@@ -61,17 +57,17 @@ void initStore(){
 	} else if( input < 0 || input > length ){
 		initStore();
 	} else {
-		input = getTheIndex(input, storeApps);
-		if( hasApp(storeApps.list[input].content, installedApps) > -1 ){
-			cout << "   " << storeApps.list[input].content.name << " já instalado.\n";
+		input += storeApps.il - 1;
+		if( LLDEhasApp(storeApps.list[input], installedApps) > -1 ){
+			cout << "   " << storeApps.list[input].name << " já instalado.\n";
 			sleep(1000);
 			initStore();
 		} else {
-			cout << "   " << storeApps.list[input].content.name << " instalado com sucesso.\n";
-			insertIn(storeApps.list[input].content, &installedApps);
+			cout << "   " << storeApps.list[input].name << " instalado com sucesso.\n";
+			LLDEinsertIn(storeApps.list[input], &installedApps);
 				
 			if( homeAppsLength < 10 )
-				insertIn(storeApps.list[input].content, &homeApps);
+				LLSEinsertIn(storeApps.list[input], &homeApps);
 			
 			sleep(1000);
 			initHome();
@@ -97,12 +93,10 @@ void initHome(){
 	if( homeLength > 0 ){
 		
 		for(int i = homeApps.init, counter = 0; i != -1; i = homeApps.list[i].next){
-			cout << setStringSize( homeApps.list[i].content.name,15) << "   ";
+			cout << counter + 4 << " | " << setStringSize( homeApps.list[i].content.name,15) << "   ";
 			counter++;
-			if( counter == 3 ){
+			if( counter % 3 == 0 )
 				cout << "\n";
-				counter = 0;
-			}
 		}
 
 		cout << "\n";
@@ -272,7 +266,7 @@ void closeApp(){
 	clearScreen;
 	cout << "\n\n\n\n\t\tFeito por: Judson Silva.\n\n\n\n";
 	
-	int length = countApps( installedApps );
+	int length = LLDEcountApps( installedApps );
 
 	if( length == 0 ) return;
 	
