@@ -6,11 +6,12 @@ using namespace std;
 
 // Variables and constants
 #include "lib/variables.h"
-// List functions
+// Libs
 #include "lib/llde.h"
 #include "lib/llse.h"
 #include "lib/llv.h"
 #include "lib/pilha.h"
+#include "lib/fila.h"
 // Interface functions
 #include "lib/interface.cpp"
 
@@ -18,11 +19,11 @@ using namespace std;
 
 int main () {
 	
-	// Global vars
-	storeApps = createLLDE();
-	installedApps = createLLDE();
-	homeApps = createLLDE();
-	runningApps = createLLDE();
+	llv storeApps;
+	llde installedApps = LLDEcreate();
+	llde runningApps = LLDEcreate();
+	llse homeApps = LLSEcreate();
+	fila appsToInstall;
 
 	// Files do read
 	ifstream installedAppsFile;
@@ -30,18 +31,18 @@ int main () {
 	
 	// Load instaled apps in lists
 	installedAppsFile.open( INSTALLED_APPS_FILE  );
-	getApps( installedAppsFile, &installedApps);
+	LLDEgetApps( installedAppsFile, &installedApps);
 	installedAppsFile.close();
 	
 	// Pass installed apps to home
 	int counter = 1;
 	for(int i = installedApps.init; i != -1; i = installedApps.list[i].next, counter++)
 		if( counter < 10 )
-			insertIn( installedApps.list[i].content, &homeApps);
+			LLSEinsertIn( installedApps.list[i].content, &homeApps);
 	
 	// Load app store
 	storeAppsFile.open( STORE_FILE );
-	getApps( storeAppsFile, &storeApps);
+	LLVgetApps( storeAppsFile, &storeApps);
 	storeAppsFile.close();
 
 	// Call interface here

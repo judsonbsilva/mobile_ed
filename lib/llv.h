@@ -1,3 +1,9 @@
+struct llv {
+	app list[APP_AMOUNT];
+	int ia = 0, fa = APP_AMOUNT - 1,
+		il = -1, fl = -1;
+};
+
 // Count amout of apps in array
 int LLVcountApps( llv appList ){
 	return ( appList.il == -1 ) && (appList.fl == -1) ? 0: appList.fl - appList.il + 1;
@@ -55,11 +61,9 @@ void LLVmoveRigth(int from, int to, llv * apps ){
 	// If not space in right
 	if( apps->fl + 1 == apps->fa ) return;
 
-	for(int i = to; i >= from; i-- ){
+	for(int i = to; i >= from; i-- )
 		apps->list[i + 1] = apps->list[i];
-		moveLength++;
-	}
-
+	
 }
 
 //Move elements to left
@@ -68,11 +72,8 @@ void LLVmoveLeft(int from, int to, llv *apps ){
 	// If not space in left
 	if( apps->il - 1 == apps->ia ) return;
 
-	for(int i = from; i <= to; i++ ){
+	for(int i = from; i <= to; i++ )
 		apps->list[i - 1] = apps->list[i];
-		moveLength++;
-	}
-
 }
 
 // Insert an app in a index on the list

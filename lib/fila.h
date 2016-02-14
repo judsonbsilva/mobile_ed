@@ -1,9 +1,9 @@
-struct pilha {
+struct fila {
 	llse list;
 	int length;
 };
 
-void PIinsertIn( app theApp, pilha * apps ){
+void FILAinsertIn( app theApp, fila * apps ){
 	if( apps->length == 0 ){
 		apps->list = LLSEcreate();
 		LLSEinsertIn( theApp, &(apps->list));
@@ -17,14 +17,14 @@ void PIinsertIn( app theApp, pilha * apps ){
 	apps->length++;
 }
 
-void PIremoveOf( pilha * apps ){
+void FILAremoveOf( fila * apps ){
 	if( apps->length > 0 ){
-		LLSEremoveOf( apps->list.init, &(apps->list) );
+		LLSEremoveOf( apps->list.finish, &(apps->list) );
 		apps->length--;
 	}
 }
 
-app PIgetApp( int index, pilha apps){
+app FILAgetApp( int index, fila apps){
 	if( index >= 0 && index < apps.length ){
 		for(int i = apps.list.init,counter = 0;
 			i != -1;

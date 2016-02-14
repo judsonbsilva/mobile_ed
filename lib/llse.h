@@ -3,7 +3,7 @@ struct node {
 	// The app
 	app content;
 	// Next node
-	int previous;
+	int next;
 };
 
 struct llse {
