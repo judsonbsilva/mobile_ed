@@ -34,6 +34,29 @@ void hasError(){
 	}
 }
 
+void installApps(){
+	if( appsToInstall.length > 0 ){
+		app theApp = FILAremoveOf( &appsToInstall );
+		if( LLDEhasApp( theApp, installedApps ) == -1 ){
+			sleep(500);
+			LLDEinsertIn( theApp, &installedApps);	
+			if( LLSEcountApps( homeApps ) < 10 )
+				LLSEinsertIn( theApp, &homeApps);
+
+			cout << "   " << theApp.name << " Instalado com sucesso. \n";
+			sleep(1000);
+			installApps();
+		}
+	}
+}
+
+void runApp( app theApp ){
+	cout << "   " << theApp.name << " rodando.\n";
+	LLDEinsertIn( theApp, &runningApps);
+	PIinsertIn( theApp, &history );
+	sleep(1000);
+}
+
 void initStore(){
 
 	setInterfaceTitle("   STORE  ", "Selecione um para instalar");
@@ -58,21 +81,59 @@ void initStore(){
 		initStore();
 	} else {
 		input += storeApps.il - 1;
-		if( LLDEhasApp(storeApps.list[input], installedApps) > -1 ){
+
+		if( FILAhasApp( storeApps.list[input], appsToInstall ) > -1 ){
+			cout << "   " << storeApps.list[input].name << " já na fila de instalação.\n";
+			sleep(1000);
+			initStore();
+		} else if( LLDEhasApp(storeApps.list[input], installedApps) > -1 ){
 			cout << "   " << storeApps.list[input].name << " já instalado.\n";
 			sleep(1000);
 			initStore();
 		} else {
-			cout << "   " << storeApps.list[input].name << " instalado com sucesso.\n";
-			LLDEinsertIn(storeApps.list[input], &installedApps);
-				
-			if( homeAppsLength < 10 )
-				LLSEinsertIn(storeApps.list[input], &homeApps);
-			
+			cout << "   Preparando para instalar " << storeApps.list[input].name << "\n";
+			FILAinsertIn( storeApps.list[input], &appsToInstall );
+			sleep(1000);
+			initStore();
+		}
+	}
+}
+
+void initHistory(){
+	
+	setInterfaceTitle("HISTÓRICO", "Ultimos app rodados");
+
+	if( history.length == 0 ){
+		cout << "    Histórico vazio\n";
+		sleep(1000);
+		initHome();
+	} else {
+		
+		for(int i = 0; i < history.length; i++){
+			setItemList(i + 1, PIgetApp(i, history).name );
+		}
+		cout << "\n\n\n";
+		setItemList(0, "Voltar");
+		setItemList(-1, "Apagar histórico");
+
+		int input;
+
+		cin >> input;
+
+		hasError();
+
+		if( input == 0 ){
+			initHome();
+		} else if( input == -1 ){
+			while( history.length > 0 ){
+				PIremoveOf(&history);
+			}
+			cout << "    Histórico apagado com sucesso.\n";
 			sleep(1000);
 			initHome();
-		}
-			
+		} else initHistory();
+		
+
 	}
 }
 
@@ -84,23 +145,29 @@ void initHome(){
 	setItemList(1, "Store");
 	setItemList(2, "Meus Apps");
 	setItemList(3, "Executando");
+	setItemList(4, "Histórico");
+	
 	cout << "\n";
 	setItemList(0, "Voltar\n");
 	cout << "-------------------------------\n    Área de Trabalho\n-------------------------------\n";
 
 	int homeLength = LLSEcountApps(homeApps);
-
+	
 	if( homeLength > 0 ){
 		
 		for(int i = homeApps.init, counter = 0; i != -1; i = homeApps.list[i].next){
-			cout << counter + 4 << " | " << setStringSize( homeApps.list[i].content.name,15) << "   ";
+			cout << "|" << setw(3) << counter + 5 << " | ";
+			cout << setw(10) << homeApps.list[i].content.name << " ";
 			counter++;
-			if( counter % 3 == 0 )
+			if( counter % 3 == 0 ){
 				cout << "\n";
+			}
 		}
 
-		cout << "\n";
+		cout << "\n\n";
 	}
+
+	installApps();
 
 	int input;
 
@@ -116,19 +183,19 @@ void initHome(){
 		initMyApps();
 	else if( input == 3 )
 		initRunning();
-	else if( input < 3 && input > homeLength )
+	else if( input == 4 )
+		initHistory();
+	else if( input < 0 && input > homeLength )
 		initHome();
 	else {
-		input = LLSEgetTheIndex(input - 3, homeApps);
+		input = LLSEgetTheIndex(input - 4, homeApps);
 
 		if( LLDEhasApp(homeApps.list[ input ].content, runningApps) > -1 ){
 			cout << "   " << (homeApps.list[input].content.name) << " já está sendo executado.\n";
 			sleep(1000);
 			initHome();
 		} else {
-			cout << "   " << (homeApps.list[input].content.name) << " rodando.\n";
-			LLDEinsertIn(homeApps.list[input].content, &runningApps);
-			sleep(1000);
+			runApp( homeApps.list[ input ].content );
 			initHome();
 		}
 	}
@@ -180,10 +247,8 @@ void initMyApps(){
 			sleep(1000);
 			initMyApps();
 		} else if( !uninstall ){
-			cout << "   " << (installedApps.list[input].content.name) << " rodando.\n";
-			LLDEinsertIn(installedApps.list[input].content, &runningApps);
-			sleep(1000);
-			initHome();
+			runApp(installedApps.list[input].content);
+			initMyApps();
 		}
 		
 		if( uninstall ){
@@ -257,7 +322,7 @@ void initRunning(){
 		
 		sleep(1000);
 		LLDEremoveOf( input, &runningApps );
-		initHome();
+		initRunning();
 	}
 }
 

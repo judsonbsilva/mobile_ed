@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string.h>
+#include <iomanip>
 
 using namespace std;
 
@@ -13,10 +14,12 @@ using namespace std;
 #include "lib/pilha.h"
 #include "lib/fila.h"
 
+// Global vars
 llv storeApps;
 llde installedApps, runningApps;
 llse homeApps;
 fila appsToInstall;
+pilha history;
 
 // Interface functions
 #include "lib/interface.cpp"
